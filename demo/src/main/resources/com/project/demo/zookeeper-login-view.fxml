@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
+    <VBox fx:id="lineContainer" prefHeight="92.0" prefWidth="590.0" spacing="20.0">
+        <children>
+         <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
+            <children>
+                <Button mnemonicParsing="false" onAction="#navigateToView" userData="load-as-view.fxml" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font name="Montserrat Regular" size="14.0" />
+                    </font>
+                    <graphic>
+                        <FontIcon iconColor="#000000" iconLiteral="fas-arrow-left" iconSize="14" />
+                    </graphic>
+                </Button>
+                  <Text fill="#58ff4e" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="3.0" text="Zookeeper" wrappingWidth="182.953125">
+                      <font>
+                          <Font name="Montserrat Black" size="32.0" />
+                      </font>
+                  </Text>
+               <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+<!--                TODO: validation-->
+               <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#navigateToLoadAsView" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <font>
+                     <Font name="Montserrat Black" size="14.0" />
+                  </font>
+               </Button>
+            </children>
+         </HBox>
+        </children>
+    </VBox>
+   <VBox alignment="CENTER_LEFT" spacing="30.0" VBox.vgrow="ALWAYS">
+      <children>
+         <Label text="Zookeeper ID" textFill="#8ade7c">
+            <font>
+               <Font name="Montserrat Black" size="16.0" />
+            </font></Label>
+         <TextField promptText="Enter your zookeeper ID here" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;">
+            <font>
+               <Font name="Montserrat Regular" size="12.0" />
+            </font></TextField>
+         <Label text="Password" textFill="#8ade7c">
+            <font>
+               <Font name="Montserrat Black" size="16.0" />
+            </font></Label>
+         <PasswordField layoutX="10.0" layoutY="65.0" promptText="Enter your zookeeper password here" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px; -fx-text-fill: #FFFFFF;">
+            <font>
+               <Font name="Montserrat Regular" size="12.0" />
+            </font>
+         </PasswordField>
+      </children>
+   </VBox>
+    <padding>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="10.0" />
+    </padding>
+    <stylesheets>
+        <URL value="@styles/index.css" />
+    </stylesheets>
+</VBox>

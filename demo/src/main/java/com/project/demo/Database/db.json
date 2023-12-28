@@ -1,0 +1,99 @@
+{
+  "admin": {
+    "salary": 8000,
+    "workedMonths": 16,
+    "name": "John Doe",
+    "sex": "male",
+    "password": "admin"
+  },
+  "name": "My Zoo",
+  "enclosures": [
+    {
+      "id": "fa4fcd36-43e2-462a-97aa-84e3b4e730e8",
+      "speciesHoused": "lion",
+      "capacity": 7,
+      "animals": [
+        {
+          "name": "Mufasa",
+          "species": "lion",
+          "age": 6,
+          "sex": "male",
+          "healthy": false
+        }
+      ],
+      "width": 40.5,
+      "height": 60.3,
+      "length": 18.2
+    },
+    {
+      "id": "b0dd8465-20f2-49c6-887a-dde165be817e",
+      "speciesHoused": "gorilla",
+      "capacity": 11,
+      "animals": [
+        {
+          "name": "Jerry",
+          "species": "gorilla",
+          "age": 10,
+          "sex": "male",
+          "healthy": true
+        }
+      ],
+      "width": 30.0,
+      "height": 50.17,
+      "length": 25.9
+    },
+    {
+      "id": "dc5fefca-9e16-496e-90d7-3fd85982e503",
+      "speciesHoused": "parrot",
+      "capacity": 0,
+      "animals": [
+        {
+          "name": "Buck",
+          "species": "parrot",
+          "age": 3,
+          "sex": "male",
+          "healthy": true
+        },
+        {
+          "name": "Becky",
+          "species": "parrot",
+          "age": 3,
+          "sex": "female",
+          "healthy": true
+        }
+      ],
+      "width": 10.2,
+      "height": 70.3,
+      "length": 43.8
+    }
+  ],
+  "zookeepers": [
+    {
+      "salary": 3000,
+      "workedMonths": 4,
+      "id": "20fdb82f-dbd4-4529-aa26-f94661cac1d2",
+      "name": "John Smith",
+      "job": "Cleans enclosures",
+      "sex": "male",
+      "password": "z1"
+    },
+    {
+      "salary": 3000,
+      "workedMonths": 2,
+      "id": "adbd5acf-241c-4b2c-90e4-5fb5ad9d2332",
+      "name": "Jane Smith",
+      "job": "Feeds Animals",
+      "sex": "female",
+      "password": "z2"
+    },
+    {
+      "salary": 2800,
+      "workedMonths": 8,
+      "id": "e3a62a9b-7ee6-4cd1-a6e8-8c168f35bc0b",
+      "name": "Connor Kelly",
+      "job": "Cleans tourist alleyways",
+      "sex": "male",
+      "password": "z3"
+    }
+  ]
+}

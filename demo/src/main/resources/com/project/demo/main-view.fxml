@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="469.0" prefWidth="590.0" spacing="20.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
+   <VBox alignment="TOP_CENTER" prefHeight="274.0" prefWidth="578.0" spacing="50.0">
+      <children>
+          <Text fill="#58ff4e" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="3.0" text="Zoo Management System" textAlignment="CENTER">
+            <font>
+              <Font name="Montserrat Black" size="32.0" />
+            </font>
+         </Text>
+         <Line endX="500.0" fill="#081c05" stroke="#75a76d" />
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+            <children>
+               <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20px;" styleClass="primary-button" text="Set up a new zoo" textAlignment="CENTER" textFill="#091e05" userData="admin-input-view.fxml">
+                  <font>
+                     <Font name="Montserrat Regular" size="14.0" />
+                  </font>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  </Button>
+               <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Load an existing zoo" textAlignment="CENTER" textFill="#091e05" userData="load-as-view.fxml">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <font>
+                     <Font name="Montserrat Regular" size="14.0" />
+                  </font>
+               </Button>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
+   <padding>
+      <Insets top="50.0" />
+   </padding>
+    <stylesheets>
+        <URL value="@styles/index.css" />
+    </stylesheets>
+</VBox>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="20.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
+    <VBox fx:id="lineContainer" alignment="TOP_CENTER" prefHeight="92.0" prefWidth="590.0" spacing="20.0">
+        <children>
+            <Text fill="#58ff4e" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="3.0" text="Browsing" textAlignment="CENTER">
+                <font>
+                    <Font name="Montserrat Black" size="32.0" />
+                </font>
+            </Text>
+            <Line endX="500" fill="#081c05" stroke="#75a76d" />
+        </children>
+    </VBox>
+
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+          <children>
+              <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToListView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Animals" textAlignment="CENTER" textFill="#091e05" userData="animals">
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <font>
+                      <Font name="Montserrat Regular" size="14.0" />
+                  </font>
+                  <graphic>
+                      <FontIcon iconColor="#000000" iconLiteral="far-eye" iconSize="14" />
+                  </graphic>
+              </Button>
+              <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToListView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Zookeepers" textAlignment="CENTER" textFill="#091e05" userData="zookeepers">
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <font>
+                      <Font name="Montserrat Regular" size="14.0" />
+                  </font>
+                  <graphic>
+                      <FontIcon iconColor="#000000" iconLiteral="far-eye" iconSize="14" />
+                  </graphic>
+              </Button>
+              <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToListView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Enclosures" textAlignment="CENTER" textFill="#091e05" userData="enclosures">
+                  <cursor>
+                      <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <font>
+                      <Font name="Montserrat Regular" size="14.0" />
+                  </font>
+                  <graphic>
+                      <FontIcon iconColor="#000000" iconLiteral="far-eye" iconSize="14" />
+                  </graphic>
+              </Button>
+          </children>
+      </HBox>
+   <HBox alignment="CENTER" layoutX="60.0" layoutY="172.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+      <children>
+         <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Species" textAlignment="CENTER" textFill="#091e05" userData="search-view.fxml">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <font>
+               <Font name="Montserrat Regular" size="14.0" />
+            </font>
+             <graphic>
+                 <FontIcon iconColor="#000000" iconLiteral="fas-search" iconSize="14" />
+             </graphic>
+         </Button>
+         <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Input" textAlignment="CENTER" textFill="#091e05" userData="zoo-input-view.fxml">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <font>
+               <Font name="Montserrat Regular" size="14.0" />
+            </font>
+             <graphic>
+                 <FontIcon iconColor="#000000" iconLiteral="fas-terminal" iconSize="14" />
+             </graphic>
+         </Button>
+         <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#exit" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Exit" textAlignment="CENTER" textFill="#091e05">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <font>
+               <Font name="Montserrat Regular" size="14.0" />
+            </font>
+             <graphic>
+                 <FontIcon iconColor="#000000" iconLiteral="far-arrow-alt-circle-left" iconSize="14" />
+             </graphic>
+         </Button>
+      </children>
+   </HBox>
+    <padding>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+    </padding>
+    <stylesheets>
+        <URL value="@styles/index.css" />
+    </stylesheets>
+</VBox>

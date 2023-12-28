@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
+    <VBox fx:id="lineContainer" prefHeight="92.0" prefWidth="590.0" spacing="20.0">
+        <children>
+         <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
+            <children>
+                <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05" userData="browsing-view.fxml">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font name="Montserrat Regular" size="14.0" />
+                    </font>
+                    <graphic>
+                        <FontIcon iconColor="#000000" iconLiteral="fas-arrow-left" iconSize="14" />
+                    </graphic>
+                </Button>
+                  <Text fx:id="listViewText" fill="#58ff4e" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="3.0" text="List" wrappingWidth="182.953125">
+                      <font>
+                          <Font name="Montserrat Black" size="32.0" />
+                      </font>
+                  </Text>
+               <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+               <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#navigateToLoadAsView" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <font>
+                     <Font name="Montserrat Black" size="14.0" />
+                  </font>
+               </Button>
+            </children>
+         </HBox>
+        </children>
+    </VBox>
+   <VBox prefWidth="490.0" spacing="30.0" VBox.vgrow="ALWAYS">
+      <children>
+          <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+              <children>
+                  <Label text="Species" textFill="#8ade7c">
+                      <font>
+                          <Font name="Montserrat Black" size="16.0" />
+                      </font>
+                  </Label>
+                  <TextField maxWidth="1.7976931348623157E308" promptText="Enter an animal species" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                      <font>
+                          <Font name="Montserrat Regular" size="12.0" />
+                      </font>
+                  </TextField>
+              </children>
+          </HBox>
+      </children>
+       <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="490.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+           <content>
+               <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;">
+                   <children>
+                       <VBox alignment="CENTER_LEFT" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                           <children>
+                               <HBox alignment="CENTER" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 50;" VBox.vgrow="ALWAYS">
+                                   <children>
+                                       <Label text="Jerry • Gorilla • Male • 10 years old • Healthy" textAlignment="CENTER" textFill="#09220e">
+                                           <padding>
+                                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                           </padding>
+                                 <font>
+                                    <Font name="Montserrat Black" size="12.0" />
+                                 </font>
+                                       </Label>
+                                   </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                               </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 50;">
+                           <children>
+                              <Label text="Jerry • Gorilla • Male • 10 years old • Healthy" textAlignment="CENTER" textFill="#09220e">
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                                 <font>
+                                    <Font name="Montserrat Black" size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                           </children>
+                       </VBox>
+                   </children>
+               </AnchorPane>
+           </content>
+           <padding>
+               <Insets right="15.0" />
+           </padding>
+       </ScrollPane>
+   </VBox>
+    <padding>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="10.0" />
+    </padding>
+    <stylesheets>
+        <URL value="@styles/index.css" />
+    </stylesheets>
+</VBox>

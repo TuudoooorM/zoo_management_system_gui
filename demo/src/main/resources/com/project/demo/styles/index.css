@@ -1,0 +1,54 @@
+@font-face {
+    -fx-font-family: "Montserrat Regular";
+    src: url("../fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    -fx-font-family: "Montserrat Black";
+    src: url("../fonts/Montserrat-Black.ttf");
+}
+
+* { -fx-font-family: "Montserrat Regular"; }
+
+.text-field {
+    -fx-text-fill: #FFFFFF;
+}
+
+.choice-box > .label {
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: transparent;
+    -fx-stroke: 2px;
+}
+
+.primary-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.8), 30, 0, 0, 0);
+}
+
+.primary-button:pressed {
+    -fx-translate-y: 2px;
+}
+
+.scroll-pane, .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #75A76D;
+}
+
+.check-box > .box {
+    -fx-border-radius: 30;
+    -fx-background-radius: 30;
+    -fx-background-color: transparent;
+    -fx-border-color: #58FF4E;
+    -fx-border-width: 2px;
+    -fx-padding: 10px;
+}
+
+.check-box:selected > .box {
+    -fx-background-color: rgba(88, 255, 78, 0.8);
+}
