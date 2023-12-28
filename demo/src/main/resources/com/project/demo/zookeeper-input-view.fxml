@@ -10,7 +10,7 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZookeeperInputController">
+<VBox alignment="TOP_CENTER" prefHeight="466.0" prefWidth="841.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZookeeperInputController">
    <HBox alignment="CENTER_LEFT" fillHeight="false" minHeight="70.0" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
       <children>
           <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05" userData="browsing-view.fxml">
@@ -34,8 +34,15 @@
                <Insets bottom="34.0" />
             </padding>
          </Region>
-<!--          TODO: validation -->
-         <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitZookeeperInput" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+         <Button fx:id="skipButton" mnemonicParsing="false" onAction="#navigateToView" userData="enclosure-input-view.fxml" styleClass="secondary-button" text="Skip" textAlignment="CENTER" textFill="#091e05">
+            <cursor>
+               <Cursor fx:constant="HAND" />
+            </cursor>
+            <font>
+               <Font name="Montserrat Black" size="14.0" />
+            </font>
+         </Button>
+         <Button layoutX="600.0" layoutY="25.0" minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitZookeeperInput" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>

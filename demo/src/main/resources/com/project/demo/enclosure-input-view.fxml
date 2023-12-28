@@ -8,10 +8,10 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
+<VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.EnclosureInputController">
    <HBox alignment="CENTER_LEFT" fillHeight="false" minHeight="70.0" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
       <children>
-          <Button mnemonicParsing="false" onAction="#navigateToView" userData="browsing-view.fxml" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05">
+          <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05" userData="browsing-view.fxml">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>
@@ -32,8 +32,15 @@
                <Insets bottom="34.0" />
             </padding>
          </Region>
-<!--          TODO: validation -->
-         <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#navigateToLoadAsView" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+          <Button fx:id="skipButton" mnemonicParsing="false" onAction="#navigateToView" styleClass="secondary-button" text="Skip" textAlignment="CENTER" textFill="#091e05" userData="animal-input-view.fxml">
+              <cursor>
+                  <Cursor fx:constant="HAND" />
+              </cursor>
+              <font>
+                  <Font name="Montserrat Black" size="14.0" />
+              </font>
+          </Button>
+         <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitEnclosureInput" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
@@ -56,7 +63,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField maxWidth="1.7976931348623157E308" promptText="Enter the name of the species housed" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="speciesInput" maxWidth="1.7976931348623157E308" promptText="Enter the name of the species housed" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -70,7 +77,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField maxWidth="1.7976931348623157E308" promptText="Enter the capacity of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="capacityInput" maxWidth="1.7976931348623157E308" promptText="Enter the capacity of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -84,7 +91,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField maxWidth="1.7976931348623157E308" promptText="Enter the width of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="widthInput" maxWidth="1.7976931348623157E308" promptText="Enter the width of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -98,7 +105,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField maxWidth="1.7976931348623157E308" promptText="Enter the height of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="heightInput" maxWidth="1.7976931348623157E308" promptText="Enter the height of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -112,7 +119,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField maxWidth="1.7976931348623157E308" promptText="Enter the length of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="lengthInput" maxWidth="1.7976931348623157E308" promptText="Enter the length of this enclosure" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>

@@ -1,15 +1,15 @@
 package com.project.demo.controllers;
 
+import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.Sex;
 import com.project.demo.ZooApplication;
-import com.project.demo.ZooInputDataStore;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class ZookeeperInputController {
-
     public TextField firstNameInput;
     public TextField lastNameInput;
     public ChoiceBox<?> sexChoiceInput;
@@ -18,12 +18,28 @@ public class ZookeeperInputController {
     public TextField jobInput;
     public PasswordField passwordInput;
 
+    private static ViewModes viewMode = ViewModes.INPUT;
+    public Button skipButton;
+
+    @FXML
+    public void initialize() {
+        skipButton.setVisible(viewMode == ViewModes.SETUP);
+    }
+
+    public static void setMode(ViewModes receivedViewMode) {
+        viewMode = receivedViewMode;
+    }
+
     public void navigateToView(ActionEvent actionEvent) {
         Object eventSource = actionEvent.getSource();
         if (!(eventSource instanceof Button clickedButton)) return;
 
         try {
-            ZooApplication.changeScene((String) clickedButton.getUserData());
+            String viewPath = (String) clickedButton.getUserData();
+            if (viewPath.contains("enclosure-input-view")) EnclosureInputController.setMode(viewMode);
+
+            ZookeeperInputController.setMode(ViewModes.INPUT);
+            ZooApplication.changeScene(viewPath);
         } catch (Exception error) {
             System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
             Platform.exit();
@@ -66,8 +82,34 @@ public class ZookeeperInputController {
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        ZooInputDataStore.setZookeeperInput(firstNameInput.getText(), lastNameInput.getText(), sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female, yearlySalary, workedMonths, jobInput.getText(), passwordEncoder.encode(passwordInput.getText()));
+        ZooApplication.zoo.addZookeeper(
+                firstNameInput.getText() + " " + lastNameInput.getText(),
+                jobInput.getText(),
+                sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female,
+                yearlySalary,
+                workedMonths,
+                passwordEncoder.encode(passwordInput.getText())
+        );
 
-        // TODO: this should not always change to animal-view because we may use this for the admin to add a new zookeeper, not just on setup
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
+        successAlert.setHeaderText("This zookeeper's details have been successfully configured.");
+        successAlert.setTitle("Zookeeper input success");
+        successAlert.show();
+
+        if (viewMode == ViewModes.INPUT) {
+            try {
+                ZooApplication.changeScene("zoo-input-view.fxml");
+            } catch (Exception error) {
+                System.err.println("There's been an error changing scene. Received scene path: zoo-input-view.fxml");
+                Platform.exit();
+            }
+        } else if (viewMode == ViewModes.SETUP) {
+            firstNameInput.clear();
+            lastNameInput.clear();
+            yearlySalaryInput.clear();
+            workedMonthsInput.clear();
+            jobInput.clear();
+            passwordInput.clear();
+        }
     }
 }

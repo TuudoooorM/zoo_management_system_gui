@@ -44,6 +44,6 @@ public class ZooApplicationController {
         if (!(eventSource instanceof Button clickedButton)) return;
 
         String listViewType = (String) clickedButton.getUserData();
-        // TODO
+        // TODO: list enclosures/animals/etc
     }
 }

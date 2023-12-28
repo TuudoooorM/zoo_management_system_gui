@@ -52,3 +52,8 @@
 .check-box:selected > .box {
     -fx-background-color: rgba(88, 255, 78, 0.8);
 }
+
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #75A76D;
+}

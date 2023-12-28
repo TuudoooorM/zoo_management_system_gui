@@ -1,14 +1,15 @@
 package com.project.demo.controllers;
 
+import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.Sex;
 import com.project.demo.ZooApplication;
-import com.project.demo.ZooInputDataStore;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class AdminInputController {
+    public TextField zooNameInput;
     public TextField firstNameInput;
     public TextField lastNameInput;
     public ChoiceBox<?> sexChoiceInput;
@@ -32,6 +33,9 @@ public class AdminInputController {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
         errorAlert.setHeaderText("Admin input error");
         StringBuilder errorsMessageBuilder = new StringBuilder();
+
+        if (zooNameInput.getText().isEmpty())
+            errorsMessageBuilder.append("The zoo must have a name.\n");
 
         if (firstNameInput.getText().length() < 3)
             errorsMessageBuilder.append("The first name is too short.\n");
@@ -63,9 +67,23 @@ public class AdminInputController {
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        ZooInputDataStore.setAdminInput(firstNameInput.getText(), lastNameInput.getText(), sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female, yearlySalary, workedMonths, passwordEncoder.encode(passwordInput.getText()));
+
+        ZooApplication.zoo.name = zooNameInput.getText();
+        ZooApplication.zoo.setAdmin(
+                firstNameInput.getText() + " " + lastNameInput.getText(),
+                sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female,
+                yearlySalary,
+                workedMonths,
+                passwordEncoder.encode(passwordInput.getText())
+        );
+
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
+        successAlert.setHeaderText("The admin details have been successfully configured.");
+        successAlert.setTitle("Admin input success");
+        successAlert.show();
 
         try {
+            ZookeeperInputController.setMode(ViewModes.SETUP);
             ZooApplication.changeScene("zookeeper-input-view.fxml");
         } catch (Exception error) {
             System.err.println("There's been an error changing scene to zookeeper-input-view.");

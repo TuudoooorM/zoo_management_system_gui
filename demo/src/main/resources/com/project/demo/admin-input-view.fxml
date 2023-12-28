@@ -13,7 +13,7 @@
 <VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.AdminInputController">
    <HBox alignment="CENTER_LEFT" fillHeight="false" minHeight="70.0" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
       <children>
-          <Button mnemonicParsing="false" onAction="#navigateToView" userData="load-as-view.fxml" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05">
+          <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05" userData="load-as-view.fxml">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>
@@ -35,7 +35,7 @@
             </padding>
          </Region>
 
-         <Button onAction="#submitAdminInput" minHeight="40.0" minWidth="150.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+         <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitAdminInput" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
@@ -52,6 +52,20 @@
                <VBox alignment="CENTER_LEFT" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                   <children>
                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+                        <children>
+                           <Label minWidth="150.0" text="Zoo name" textFill="#8ade7c">
+                              <font>
+                                 <Font name="Montserrat Black" size="16.0" />
+                              </font>
+                           </Label>
+                           <TextField fx:id="zooNameInput" maxWidth="1.7976931348623157E308" promptText="Enter the name of the new zoo" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                              <font>
+                                 <Font name="Montserrat Regular" size="12.0" />
+                              </font>
+                           </TextField>
+                        </children>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                         <children>
                            <Label minWidth="150.0" text="First name" textFill="#8ade7c">
                               <font>
@@ -72,7 +86,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="lastNameInput"  maxWidth="1.7976931348623157E308" promptText="Enter admin's last name" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="lastNameInput" maxWidth="1.7976931348623157E308" promptText="Enter admin's last name" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -103,7 +117,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="yearlySalaryInput"  maxWidth="1.7976931348623157E308" promptText="Enter admin's yearly salary here" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="yearlySalaryInput" maxWidth="1.7976931348623157E308" promptText="Enter admin's yearly salary here" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -117,7 +131,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="workedMonthsInput"  maxWidth="1.7976931348623157E308" promptText="Enter admin's number of worked months" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="workedMonthsInput" maxWidth="1.7976931348623157E308" promptText="Enter admin's number of worked months" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -131,7 +145,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <PasswordField fx:id="passwordInput"  maxWidth="1.7976931348623157E308" promptText="Enter the admin password" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <PasswordField fx:id="passwordInput" maxWidth="1.7976931348623157E308" promptText="Enter the admin password" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>

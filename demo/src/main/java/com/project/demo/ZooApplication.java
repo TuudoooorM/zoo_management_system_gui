@@ -1,5 +1,6 @@
 package com.project.demo;
 
+import com.project.demo.Zoo.Zoo;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 public class ZooApplication extends Application {
     private static Stage primaryStage;
+    public static Zoo zoo = new Zoo();
 
     @Override
     public void start(Stage stage) throws IOException {

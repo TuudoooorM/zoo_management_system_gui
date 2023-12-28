@@ -15,7 +15,7 @@ public class Zoo {
     public Admin admin = null;
 
     @NotNull(message = "Missing zoo name")
-    public final String name;
+    public String name;
 
     private final HashSet<String> species = new HashSet<>();
     public final ArrayList<@Valid Enclosure> enclosures = new ArrayList<>(1);
@@ -55,7 +55,11 @@ public class Zoo {
         this.admin.increaseWorkedMonths(workedMonths);
     }
 
-    public void addAnimal(Animal animal) throws MissingEnclosureException, EnclosureCapacityExceededException{
+    public void addAnimal(String name, String species, Sex sex, int age, boolean healthy) throws EnclosureCapacityExceededException, MissingEnclosureException {
+        addAnimal(new Animal(name, species, sex, age, healthy));
+    }
+
+    public void addAnimal(Animal animal) throws MissingEnclosureException, EnclosureCapacityExceededException {
 
         Enclosure enclosureHousingThisSpecies = enclosures.
                 stream()
