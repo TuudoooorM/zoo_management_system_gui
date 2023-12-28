@@ -12,7 +12,7 @@ public class AdminInputController {
     public TextField zooNameInput;
     public TextField firstNameInput;
     public TextField lastNameInput;
-    public ChoiceBox<?> sexChoiceInput;
+    public ChoiceBox<String> sexChoiceInput;
     public TextField yearlySalaryInput;
     public TextField workedMonthsInput;
     public PasswordField passwordInput;

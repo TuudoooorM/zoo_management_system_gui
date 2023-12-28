@@ -102,8 +102,14 @@ public class Zoo {
         return newZookeeper;
     }
 
-    public boolean removeZookeeper(Zookeeper zookeeper) {
-        return zookeepers.remove(zookeeper);
+    public boolean removeZookeeper(String zookeeperID) {
+        Zookeeper foundZookeeper = zookeepers
+                .stream()
+                .filter(zookeeper -> zookeeper.getId().equals(zookeeperID))
+                .findFirst()
+                .orElse(null);
+
+        return foundZookeeper != null && zookeepers.remove(foundZookeeper);
     }
 
     public void listAnimals() {

@@ -3,6 +3,7 @@ package com.project.demo.Zoo;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class Zookeeper implements IEmployed {
@@ -39,7 +40,8 @@ public class Zookeeper implements IEmployed {
         this.password = null;
     }
     public Zookeeper(String name, String job, Sex sex, String password) {
-        this.id = UUID.randomUUID().toString();
+        Random random = new Random();
+        this.id = String.valueOf(random.nextInt(9999 - 1000) + 1000);
         this.name = name;
         this.job = job;
         this.sex = sex;

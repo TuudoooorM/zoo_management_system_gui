@@ -57,3 +57,15 @@
     -fx-background-color: transparent;
     -fx-text-fill: #75A76D;
 }
+
+.nothing-found-label {
+    -fx-text-fill: #75A76D;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+.result-component--indented {
+    -fx-padding: 5px 5px 5px 45px;
+    -fx-border-insets: 0 0 0 40px;
+    -fx-background-insets: 0 0 0 40px;
+}

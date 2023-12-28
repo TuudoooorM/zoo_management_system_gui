@@ -16,4 +16,6 @@ module com.project.demo {
     exports com.project.demo;
     exports com.project.demo.controllers;
     opens com.project.demo.controllers to javafx.fxml;
+    exports com.project.demo.components;
+    opens com.project.demo.components to javafx.fxml;
 }

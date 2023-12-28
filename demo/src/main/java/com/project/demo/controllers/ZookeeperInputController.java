@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class ZookeeperInputController {
     public TextField firstNameInput;
     public TextField lastNameInput;
-    public ChoiceBox<?> sexChoiceInput;
+    public ChoiceBox<String> sexChoiceInput;
     public TextField yearlySalaryInput;
     public TextField workedMonthsInput;
     public TextField jobInput;

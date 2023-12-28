@@ -9,7 +9,7 @@
 <?import org.kordamp.ikonli.javafx.*?>
 
 <VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
-    <VBox fx:id="lineContainer" prefHeight="92.0" prefWidth="590.0" spacing="20.0">
+    <VBox  prefHeight="92.0" prefWidth="590.0" spacing="20.0">
         <children>
          <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
             <children>

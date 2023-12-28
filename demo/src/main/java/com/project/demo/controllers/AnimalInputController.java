@@ -14,7 +14,7 @@ import javafx.scene.control.*;
 public class AnimalInputController {
     public TextField nameInput;
     public TextField speciesInput;
-    public ChoiceBox<?> sexChoiceInput;
+    public ChoiceBox<String> sexChoiceInput;
     public TextField ageInput;
     public CheckBox healthinessInput;
 

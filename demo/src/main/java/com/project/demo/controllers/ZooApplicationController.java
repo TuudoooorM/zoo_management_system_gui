@@ -39,11 +39,4 @@ public class ZooApplicationController {
         }
     }
 
-    public void navigateToListView(ActionEvent actionEvent) {
-        Object eventSource = actionEvent.getSource();
-        if (!(eventSource instanceof Button clickedButton)) return;
-
-        String listViewType = (String) clickedButton.getUserData();
-        // TODO: list enclosures/animals/etc
-    }
 }

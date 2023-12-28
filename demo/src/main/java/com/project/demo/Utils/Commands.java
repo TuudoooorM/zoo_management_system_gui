@@ -200,20 +200,9 @@ public class Commands {
                 String zookeeperID = InputReader.tryReadLineFromConsole("Please enter the zookeeper's ID: ");
                 if (zookeeperID == null) return;
 
-                Zookeeper foundZookeeper = zoo.zookeepers
-                        .stream()
-                        .filter(zookeeper -> zookeeper.getId().equals(zookeeperID))
-                        .findFirst()
-                        .orElse(null);
-
-                if (foundZookeeper == null) {
-                    System.err.println("\nThere's no zookeeper with that id.");
-                    return;
-                }
-
-                boolean didZookeeperExistInZoo = zoo.removeZookeeper(foundZookeeper);
+                boolean didZookeeperExistInZoo = zoo.removeZookeeper(zookeeperID);
                 if (!didZookeeperExistInZoo)
-                    System.out.println("That zookeeper did not exist... somehow?");
+                    System.out.println("There's no zookeeper with that ID.");
                 else
                     System.out.println("Zookeeper deleted successfully!");
             }

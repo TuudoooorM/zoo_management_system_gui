@@ -9,7 +9,7 @@
 <?import javafx.scene.text.*?>
 
 <VBox alignment="CENTER" prefHeight="469.0" prefWidth="590.0" spacing="20.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
-    <VBox fx:id="lineContainer" alignment="TOP_CENTER" prefHeight="92.0" prefWidth="590.0" spacing="20.0">
+    <VBox  alignment="TOP_CENTER" prefHeight="92.0" prefWidth="590.0" spacing="20.0">
         <children>
             <Text fill="#58ff4e" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="3.0" text="Load as..." textAlignment="CENTER">
                 <font>
