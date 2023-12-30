@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 
 public class Enclosure implements ISpace, Comparable<Enclosure> {
@@ -35,7 +36,8 @@ public class Enclosure implements ISpace, Comparable<Enclosure> {
     }
 
     public Enclosure(String speciesHoused, int capacity, float width, float height, float length) {
-        this.id = UUID.randomUUID().toString();
+        Random random = new Random();
+        this.id = String.valueOf(random.nextInt(9999 - 1000) + 1000);
         this.speciesHoused = speciesHoused;
         this.capacity = capacity;
         this.width = width;
@@ -81,7 +83,10 @@ public class Enclosure implements ISpace, Comparable<Enclosure> {
     }
 
     public void setId(String id) {
-        this.id = id == null ? UUID.randomUUID().toString() : id;
+        if (id == null) {
+            Random random = new Random();
+            this.id = String.valueOf(random.nextInt(9999 - 1000) + 1000);
+        } else this.id = id;
     }
 
     public void setWidth(float width) {

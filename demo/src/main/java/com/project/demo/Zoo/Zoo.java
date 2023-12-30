@@ -77,8 +77,27 @@ public class Zoo {
         enclosureHousingThisSpecies.addAnimal(animal);
     }
 
-    public boolean removeAnimal(Enclosure enclosure, Animal animal) {
-        return enclosure.removeAnimal(animal);
+    public boolean removeAnimal(String species, String name) {
+        Enclosure foundEnclosure = enclosures
+                .stream()
+                .filter(enclosure -> enclosure.speciesHoused.equals(species))
+                .findFirst()
+                .orElse(null);
+
+        if (foundEnclosure == null) return false;
+
+        Animal foundAnimal = foundEnclosure.animals
+                .stream()
+                .filter(animal -> {
+                    assert animal.name != null;
+                    return animal.name.equals(name);
+                })
+                .findFirst()
+                .orElse(null);
+
+        if (foundAnimal == null) return false;
+
+        return foundEnclosure.removeAnimal(foundAnimal);
     }
 
     public Enclosure addEnclosure(String speciesHoused, int capacity, float width, float height, float length) {
@@ -88,8 +107,14 @@ public class Zoo {
         return newEnclosure;
     }
 
-    public boolean removeEnclosure(Enclosure enclosure) {
-        return enclosures.remove(enclosure);
+    public boolean removeEnclosure(String enclosureID) {
+        Enclosure foundEnclosure = enclosures
+                .stream()
+                .filter(enclosure -> enclosure.getId().equals(enclosureID))
+                .findFirst()
+                .orElse(null);
+
+        return foundEnclosure != null && enclosures.remove(foundEnclosure);
     }
 
     public Zookeeper addZookeeper(String name, String job, Sex sex, int salary, int workedMonths, String password) {

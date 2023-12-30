@@ -65,7 +65,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="firstNameInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's first name" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="firstNameInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's first name"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -79,7 +79,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="lastNameInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's last name" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="lastNameInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's last name"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -110,7 +110,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="yearlySalaryInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's yearly salary here" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="yearlySalaryInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's yearly salary here"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -124,7 +124,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="workedMonthsInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's number of worked months" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="workedMonthsInput" maxWidth="1.7976931348623157E308" promptText="Enter zookeeper's number of worked months"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -138,7 +138,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="jobInput" maxWidth="1.7976931348623157E308" promptText="Enter the zookeeper's job here" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="jobInput" maxWidth="1.7976931348623157E308" promptText="Enter the zookeeper's job here"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -152,7 +152,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <PasswordField fx:id="passwordInput" maxWidth="1.7976931348623157E308" promptText="Enter the zookeeper's password" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <PasswordField fx:id="passwordInput" maxWidth="1.7976931348623157E308" promptText="Enter the zookeeper's password"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>

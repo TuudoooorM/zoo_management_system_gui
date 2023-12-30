@@ -65,7 +65,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="nameInput" maxWidth="1.7976931348623157E308" promptText="Enter the name of the animal" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="nameInput" maxWidth="1.7976931348623157E308" promptText="Enter the name of the animal"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -79,7 +79,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="speciesInput" maxWidth="1.7976931348623157E308" promptText="Enter the species of the animal" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="speciesInput" maxWidth="1.7976931348623157E308" promptText="Enter the species of the animal"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>
@@ -110,7 +110,7 @@
                                  <Font name="Montserrat Black" size="16.0" />
                               </font>
                            </Label>
-                           <TextField fx:id="ageInput" maxWidth="1.7976931348623157E308" promptText="Enter the age of the animal" style="-fx-border-radius: 30; -fx-background-color: transparent; -fx-border-color: #58FF4E; -fx-border-width: 2px; -fx-padding: 10px;" HBox.hgrow="ALWAYS">
+                           <TextField fx:id="ageInput" maxWidth="1.7976931348623157E308" promptText="Enter the age of the animal"  HBox.hgrow="ALWAYS">
                               <font>
                                  <Font name="Montserrat Regular" size="12.0" />
                               </font>

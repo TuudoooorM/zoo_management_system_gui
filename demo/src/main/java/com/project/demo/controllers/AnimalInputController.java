@@ -98,7 +98,6 @@ public class AnimalInputController {
     }
 
     public void finishSetup(ActionEvent actionEvent) {
-        // TODO: save zooInputData to db
         System.out.println("Admin: ");
         Admin admin = ZooApplication.zoo.admin;
         System.out.printf("%s %s %s %d %d\n", admin.name, admin.sex, admin.password, admin.getSalary(), admin.getWorkedMonths());

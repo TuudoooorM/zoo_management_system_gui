@@ -46,7 +46,7 @@ public class ListController {
 
     private void listZookeepers() {
         ArrayList<Zookeeper> zookeepers = ZooApplication.zoo.zookeepers;
-        if (zookeepers.size() == 0) {
+        if (zookeepers.isEmpty()) {
             Label noZookeepersLabel = new Label("There are no zookeepers in this zoo.");
             noZookeepersLabel.getStyleClass().add("nothing-found-label");
             listResultsContainer.getChildren().add(noZookeepersLabel);
@@ -89,9 +89,9 @@ public class ListController {
     private void listAnimals() {
         ArrayList<Enclosure> enclosures = ZooApplication.zoo.enclosures;
         if (enclosures.isEmpty()) {
-            Label noEnclosuresLabel = new Label("There are no enclosures in this zoo.");
-            noEnclosuresLabel.getStyleClass().add("nothing-found-label");
-            listResultsContainer.getChildren().add(noEnclosuresLabel);
+            Label noAnimalsLabel = new Label("There are no animals in this zoo.");
+            noAnimalsLabel.getStyleClass().add("nothing-found-label");
+            listResultsContainer.getChildren().add(noAnimalsLabel);
             return;
         }
 
@@ -106,7 +106,7 @@ public class ListController {
 
             ArrayList<Animal> animals = enclosure.animals;
             if (animals.isEmpty()) {
-                Label noAnimalsLabel = new Label("There are no animals in this enclosures.");
+                Label noAnimalsLabel = new Label("There are no animals in this enclosure.");
                 noAnimalsLabel.getStyleClass().add("nothing-found-label");
                 listResultsContainer.getChildren().add(noAnimalsLabel);
                 enclosureIndex++;
