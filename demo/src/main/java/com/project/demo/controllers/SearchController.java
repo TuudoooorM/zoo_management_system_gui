@@ -10,21 +10,9 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
-public class SearchController {
+public class SearchController extends DefaultController {
     public TextField searchInput;
     public VBox searchResultsContainer;
-
-    public void navigateToView(ActionEvent actionEvent) {
-        Object eventSource = actionEvent.getSource();
-        if (!(eventSource instanceof Button clickedButton)) return;
-
-        try {
-            ZooApplication.changeScene((String) clickedButton.getUserData());
-        } catch (Exception error) {
-            System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
-            Platform.exit();
-        }
-    }
 
     public void handleSearch(ActionEvent actionEvent) {
         String searchInputText = searchInput.getText();

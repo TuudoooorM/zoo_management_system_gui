@@ -5,7 +5,6 @@ import com.project.demo.Zoo.Sex;
 import com.project.demo.ZooApplication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -18,16 +17,21 @@ public class ZookeeperInputController {
     public TextField jobInput;
     public PasswordField passwordInput;
 
-    private static ViewModes viewMode = ViewModes.INPUT;
     public Button skipButton;
 
-    @FXML
-    public void initialize() {
-        skipButton.setVisible(viewMode == ViewModes.SETUP);
+    private static ViewModes viewMode = ViewModes.INPUT;
+
+    public static ViewModes getViewMode() {
+        return viewMode;
     }
 
-    public static void setMode(ViewModes receivedViewMode) {
-        viewMode = receivedViewMode;
+    public static void setViewMode(ViewModes viewMode) {
+        ZookeeperInputController.viewMode = viewMode;
+    }
+
+
+    public void initialize() {
+        skipButton.setVisible(getViewMode() == ViewModes.SETUP);
     }
 
     public void navigateToView(ActionEvent actionEvent) {
@@ -36,16 +40,15 @@ public class ZookeeperInputController {
 
         try {
             String viewPath = (String) clickedButton.getUserData();
-            if (viewPath.contains("enclosure-input-view")) EnclosureInputController.setMode(viewMode);
+            if (viewPath.contains("enclosure-input-view")) EnclosureInputController.setViewMode(getViewMode());
 
-            ZookeeperInputController.setMode(ViewModes.INPUT);
+            ZookeeperInputController.setViewMode(ViewModes.INPUT);
             ZooApplication.changeScene(viewPath);
         } catch (Exception error) {
             System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
             Platform.exit();
         }
     }
-
 
     public void submitZookeeperInput(ActionEvent actionEvent) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
@@ -96,14 +99,14 @@ public class ZookeeperInputController {
         successAlert.setTitle("Zookeeper input success");
         successAlert.show();
 
-        if (viewMode == ViewModes.INPUT) {
+        if (getViewMode() == ViewModes.INPUT) {
             try {
                 ZooApplication.changeScene("zoo-input-view.fxml");
             } catch (Exception error) {
                 System.err.println("There's been an error changing scene. Received scene path: zoo-input-view.fxml");
                 Platform.exit();
             }
-        } else if (viewMode == ViewModes.SETUP) {
+        } else if (getViewMode() == ViewModes.SETUP) {
             firstNameInput.clear();
             lastNameInput.clear();
             yearlySalaryInput.clear();

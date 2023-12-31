@@ -8,7 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class AdminInputController {
+public class AdminInputController extends DefaultController {
     public TextField zooNameInput;
     public TextField firstNameInput;
     public TextField lastNameInput;
@@ -16,18 +16,6 @@ public class AdminInputController {
     public TextField yearlySalaryInput;
     public TextField workedMonthsInput;
     public PasswordField passwordInput;
-
-    public void navigateToView(ActionEvent actionEvent) {
-        Object eventSource = actionEvent.getSource();
-        if (!(eventSource instanceof Button clickedButton)) return;
-
-        try {
-            ZooApplication.changeScene((String) clickedButton.getUserData());
-        } catch (Exception error) {
-            System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
-            Platform.exit();
-        }
-    }
 
     public void submitAdminInput(ActionEvent actionEvent) {
         Alert errorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
@@ -83,7 +71,7 @@ public class AdminInputController {
         successAlert.show();
 
         try {
-            ZookeeperInputController.setMode(ViewModes.SETUP);
+            ZookeeperInputController.setViewMode(ViewModes.SETUP);
             ZooApplication.changeScene("zookeeper-input-view.fxml");
         } catch (Exception error) {
             System.err.println("There's been an error changing scene to zookeeper-input-view.");

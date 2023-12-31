@@ -22,17 +22,20 @@ public class ZooApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException, EnclosureCapacityExceededException, MissingEnclosureException {
-        // TODO: authentication and authorisation
         // TODO: DB integration
 
         primaryStage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(ZooApplication.class.getResource("zoo-input-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ZooApplication.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1024, 512);
         primaryStage.setTitle("Zoo Management System");
         primaryStage.setScene(scene);
 
         scene.setFill(Color.web("#11190F"));
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 
     public static void changeScene(String fxmlFilePath) throws IOException {
@@ -42,7 +45,4 @@ public class ZooApplication extends Application {
         primaryStage.getScene().setRoot(newScene);
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
 }

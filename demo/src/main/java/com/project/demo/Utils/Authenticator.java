@@ -7,8 +7,8 @@ import com.project.demo.Zoo.Zookeeper;
 import com.project.demo.Zoo.Zoo;
 
 public abstract class Authenticator {
-    public static Privileges privilege;
-    public static IEmployed employee;
+    public static Privileges privilege = Privileges.GUEST;
+    public static IEmployed employee = null;
 
     private static boolean authenticateZookeeper(Zoo zoo) throws AuthenticationException {
         String zookeeperID = InputReader.readZookeeperIDFromInput();

@@ -29,6 +29,7 @@ public class Admin implements IEmployed {
         this.password = password;
     }
 
+    @Override
     public String getName() {
         return name;
     }

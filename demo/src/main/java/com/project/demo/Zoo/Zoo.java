@@ -49,6 +49,7 @@ public class Zoo {
         return species.size();
     }
 
+
     public void setAdmin(String name, Sex sex, int salary, int workedMonths, String password) {
         this.admin = new Admin(name, sex, password);
         this.admin.setSalary(salary);
@@ -60,7 +61,6 @@ public class Zoo {
     }
 
     public void addAnimal(Animal animal) throws MissingEnclosureException, EnclosureCapacityExceededException {
-
         Enclosure enclosureHousingThisSpecies = enclosures.
                 stream()
                 .filter(enclosure -> enclosure.speciesHoused.equalsIgnoreCase(animal.species))

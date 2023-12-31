@@ -28,6 +28,11 @@ public class Zookeeper implements IEmployed {
     @NotNull(message = "Password for zookeeper is missing")
     private final String password;
 
+
+    public String getName() {
+        return name;
+    }
+
     public String getPassword() {
         return password;
     }

@@ -18,16 +18,22 @@ public class AnimalInputController {
     public TextField ageInput;
     public CheckBox healthinessInput;
 
-    private static ViewModes viewMode = ViewModes.INPUT;
     public Button finishSetupButton;
+
+
+    private static ViewModes viewMode = ViewModes.INPUT;
+
+    public static void setViewMode(ViewModes viewMode) {
+        AnimalInputController.viewMode = viewMode;
+    }
+
+    public static ViewModes getViewMode() {
+        return viewMode;
+    }
 
     @FXML
     public void initialize() {
-        finishSetupButton.setVisible(viewMode == ViewModes.SETUP);
-    }
-
-    public static void setMode(ViewModes receivedViewMode) {
-        viewMode = receivedViewMode;
+        finishSetupButton.setVisible(getViewMode() == ViewModes.SETUP);
     }
 
     public void navigateToView(ActionEvent actionEvent) {
@@ -35,7 +41,7 @@ public class AnimalInputController {
         if (!(eventSource instanceof Button clickedButton)) return;
 
         try {
-            AnimalInputController.setMode(ViewModes.INPUT);
+            AnimalInputController.setViewMode(ViewModes.INPUT);
             ZooApplication.changeScene((String) clickedButton.getUserData());
         } catch (Exception error) {
             System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
@@ -82,14 +88,14 @@ public class AnimalInputController {
         successAlert.setTitle("Animal input success");
         successAlert.show();
 
-        if (viewMode == ViewModes.INPUT) {
+        if (getViewMode() == ViewModes.INPUT) {
             try {
                 ZooApplication.changeScene("zoo-input-view.fxml");
             } catch (Exception error) {
                 System.err.println("There's been an error changing scene. Received scene path: zoo-input-view.fxml");
                 Platform.exit();
             }
-        } else if (viewMode == ViewModes.SETUP) {
+        } else if (getViewMode() == ViewModes.SETUP) {
             nameInput.clear();
             speciesInput.clear();
             ageInput.clear();
@@ -112,7 +118,7 @@ public class AnimalInputController {
         try {
             Authenticator.privilege = Privileges.ADMIN;
             Authenticator.employee = ZooApplication.zoo.admin;
-            AnimalInputController.setMode(ViewModes.INPUT);
+            AnimalInputController.setViewMode(ViewModes.INPUT);
             ZooApplication.changeScene("browsing-view.fxml");
         } catch (Exception error) {
             System.err.println("There's been an error changing scene to browsing-view.fxml");

@@ -5,4 +5,6 @@ public interface IEmployed {
     int getWorkedMonths();
     void setSalary(int newSalary);
     void increaseWorkedMonths(int count);
+
+    String getName();
 }

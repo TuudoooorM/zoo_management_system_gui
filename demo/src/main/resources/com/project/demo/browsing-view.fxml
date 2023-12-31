@@ -9,10 +9,12 @@
 <?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.*?>
 
-<VBox alignment="CENTER" prefHeight="469.0" prefWidth="590.0" spacing="20.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.ZooApplicationController">
+<?import com.project.demo.components.PrivilegeStatusComponent?>
+<VBox alignment="CENTER" prefHeight="469.0" prefWidth="590.0" spacing="20.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.BrowsingController">
+    <PrivilegeStatusComponent fx:id="privilegeStatus" />
     <VBox alignment="TOP_CENTER" prefHeight="92.0" prefWidth="590.0" spacing="20.0">
         <children>
-            <Text fill="#58ff4e" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="3.0" text="Browsing" textAlignment="CENTER">
+            <Text fx:id="browsingHeader" fill="#58ff4e" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="3.0" textAlignment="CENTER">
                 <font>
                     <Font name="Montserrat Black" size="32.0" />
                 </font>
@@ -49,7 +51,7 @@
       </HBox>
    <HBox alignment="CENTER" layoutX="60.0" layoutY="172.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
       <children>
-         <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Input" textAlignment="CENTER" textFill="#091e05" userData="zoo-input-view.fxml">
+         <Button fx:id="zooInputButton" layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Input" textAlignment="CENTER" textFill="#091e05" userData="zoo-input-view.fxml">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>

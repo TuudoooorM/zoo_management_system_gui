@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class EnclosureInputController {
-
     public TextField speciesInput;
     public TextField heightInput;
     public TextField lengthInput;
@@ -17,14 +16,19 @@ public class EnclosureInputController {
     public Button skipButton;
 
 
-    private static ViewModes viewMode = ViewModes.INPUT;
-    @FXML
-    public void initialize() {
-        skipButton.setVisible(viewMode == ViewModes.SETUP);
+    public static ViewModes getViewMode() {
+        return viewMode;
     }
 
-    public static void setMode(ViewModes receivedViewMode) {
-        viewMode = receivedViewMode;
+    public static void setViewMode(ViewModes viewMode) {
+        EnclosureInputController.viewMode = viewMode;
+    }
+
+    private static ViewModes viewMode = ViewModes.INPUT;
+
+    @FXML
+    public void initialize() {
+        skipButton.setVisible(getViewMode() == ViewModes.SETUP);
     }
 
     public void navigateToView(ActionEvent actionEvent) {
@@ -33,9 +37,9 @@ public class EnclosureInputController {
 
         try {
             String viewPath = (String) clickedButton.getUserData();
-            if (viewPath.contains("animal-input-view")) AnimalInputController.setMode(viewMode);
+            if (viewPath.contains("animal-input-view")) AnimalInputController.setViewMode(getViewMode());
 
-            EnclosureInputController.setMode(ViewModes.INPUT);
+            EnclosureInputController.setViewMode(ViewModes.INPUT);
             ZooApplication.changeScene(viewPath);
         } catch (Exception error) {
             System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
@@ -93,14 +97,14 @@ public class EnclosureInputController {
         successAlert.setTitle("Enclosure input success");
         successAlert.show();
 
-        if (viewMode == ViewModes.INPUT) {
+        if (getViewMode() == ViewModes.INPUT) {
             try {
                 ZooApplication.changeScene("zoo-input-view.fxml");
             } catch (Exception error) {
                 System.err.println("There's been an error changing scene. Received scene path: zoo-input-view.fxml");
                 Platform.exit();
             }
-        } else if (viewMode == ViewModes.SETUP) {
+        } else if (getViewMode() == ViewModes.SETUP) {
             speciesInput.clear();
             capacityInput.clear();
             widthInput.clear();
