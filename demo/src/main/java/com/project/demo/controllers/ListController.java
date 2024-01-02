@@ -34,7 +34,7 @@ public class ListController extends DefaultController {
     private void listZookeepers() {
         if (Authenticator.privilege == Privileges.GUEST) {
             Label noPermissionLabel = new Label("You do not have permission to list zookeepers.");
-            noPermissionLabel.getStyleClass().add("nothing-found-label");
+            noPermissionLabel.getStyleClass().add("generic-centered-label");
             listResultsContainer.getChildren().add(noPermissionLabel);
             return;
         }
@@ -43,7 +43,7 @@ public class ListController extends DefaultController {
         ArrayList<Zookeeper> zookeepers = ZooApplication.zoo.zookeepers;
         if (zookeepers.isEmpty()) {
             Label noZookeepersLabel = new Label("There are no zookeepers in this zoo.");
-            noZookeepersLabel.getStyleClass().add("nothing-found-label");
+            noZookeepersLabel.getStyleClass().add("generic-centered-label");
             listResultsContainer.getChildren().add(noZookeepersLabel);
             return;
         }
@@ -58,7 +58,7 @@ public class ListController extends DefaultController {
             listResultsContainer.getChildren().add(prepareZookeeperResultComponent((Zookeeper) Authenticator.employee));
 
             Label onlyShowingThisZookeeperLabel = new Label("Only showing information about you.");
-            onlyShowingThisZookeeperLabel.getStyleClass().add("nothing-found-label");
+            onlyShowingThisZookeeperLabel.getStyleClass().add("generic-centered-label");
             listResultsContainer.getChildren().add(onlyShowingThisZookeeperLabel);
 
             return;
@@ -74,7 +74,7 @@ public class ListController extends DefaultController {
         ArrayList<Enclosure> enclosures = ZooApplication.zoo.enclosures;
         if (enclosures.isEmpty()) {
             Label noEnclosuresLabel = new Label("There are no enclosures in this zoo.");
-            noEnclosuresLabel.getStyleClass().add("nothing-found-label");
+            noEnclosuresLabel.getStyleClass().add("generic-centered-label");
             listResultsContainer.getChildren().add(noEnclosuresLabel);
             return;
         }
@@ -96,7 +96,7 @@ public class ListController extends DefaultController {
         ArrayList<Enclosure> enclosures = ZooApplication.zoo.enclosures;
         if (enclosures.isEmpty()) {
             Label noAnimalsLabel = new Label("There are no animals in this zoo.");
-            noAnimalsLabel.getStyleClass().add("nothing-found-label");
+            noAnimalsLabel.getStyleClass().add("generic-centered-label");
             listResultsContainer.getChildren().add(noAnimalsLabel);
             return;
         }
@@ -113,7 +113,7 @@ public class ListController extends DefaultController {
             ArrayList<Animal> animals = enclosure.animals;
             if (animals.isEmpty()) {
                 Label noAnimalsLabel = new Label("There are no animals in this enclosure.");
-                noAnimalsLabel.getStyleClass().add("nothing-found-label");
+                noAnimalsLabel.getStyleClass().add("generic-centered-label");
                 listResultsContainer.getChildren().add(noAnimalsLabel);
                 enclosureIndex++;
 

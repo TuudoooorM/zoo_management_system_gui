@@ -21,10 +21,9 @@ public class ZooApplication extends Application {
     public static Zoo zoo = new Zoo();
 
     @Override
-    public void start(Stage stage) throws IOException, EnclosureCapacityExceededException, MissingEnclosureException {
-        // TODO: DB integration
-
+    public void start(Stage stage) throws IOException {
         primaryStage = stage;
+
         FXMLLoader fxmlLoader = new FXMLLoader(ZooApplication.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1024, 512);
         primaryStage.setTitle("Zoo Management System");

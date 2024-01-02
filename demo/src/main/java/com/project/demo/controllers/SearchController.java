@@ -27,13 +27,12 @@ public class SearchController extends DefaultController {
         ArrayList<Animal> foundAnimals = ZooApplication.zoo.searchBySpecies(searchInputText);
         if (foundAnimals == null) {
             Label nothingFoundLabel = new Label("No animals with this species were found.");
-            nothingFoundLabel.getStyleClass().add("nothing-found-label");
+            nothingFoundLabel.getStyleClass().add("generic-centered-label");
             searchResultsContainer.getChildren().add(nothingFoundLabel);
             return;
         }
 
         for (Animal animal : foundAnimals) {
-            System.out.println("Found animal.");
             ResultComponent animalResultComponent = new ResultComponent();
             animalResultComponent.setText(
                     String.format("%s • %s • %s • %d year%s old • %s", animal.name, animal.species, animal.sex, animal.age, animal.age != 1 ? "s" : "", animal.healthy ? "Healthy" : "Unhealthy")

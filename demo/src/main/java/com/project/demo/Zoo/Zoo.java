@@ -1,25 +1,21 @@
 package com.project.demo.Zoo;
 
+import com.project.demo.Database.ZooDatabaseManager;
 import com.project.demo.Exceptions.EnclosureCapacityExceededException;
 import com.project.demo.Exceptions.MissingEnclosureException;
 import com.project.demo.Utils.Authenticator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Zoo {
-    @Valid @NotNull(message = "Missing the admin of the zoo")
     public Admin admin = null;
 
-    @NotNull(message = "Missing zoo name")
     public String name;
 
     private final HashSet<String> species = new HashSet<>();
-    public final ArrayList<@Valid Enclosure> enclosures = new ArrayList<>(1);
-    public final ArrayList<@Valid Zookeeper> zookeepers = new ArrayList<>(2);
+    public final ArrayList<Enclosure> enclosures = new ArrayList<>(1);
+    public final ArrayList<Zookeeper> zookeepers = new ArrayList<>(2);
 
 
     public Zoo() {
@@ -30,19 +26,21 @@ public class Zoo {
         this.name = name;
     }
 
-    @JsonIgnore
+
     public int getAnimalsCount() {
         return enclosures
                 .stream()
                 .reduce(0, (totalAnimalsCount, currentEnclosure) -> totalAnimalsCount + currentEnclosure.animals.size(), Integer::sum);
     }
 
-    @JsonIgnore
     public int getSpeciesCount() {
-        if (!species.isEmpty()) return species.size();
+        if (!species.isEmpty()) {
+            System.out.println("Species size called.");
+            return species.size();
+        }
         if (enclosures.isEmpty()) return 0;
 
-        // deserializing doesn't update species count, so after deserializing just take the distinct species from the enclosures
+        // TODO: is this the case still? deserializing doesn't update species count, so after deserializing just take the distinct species from the enclosures
         for (Enclosure enclosure : enclosures)
             species.add(enclosure.speciesHoused);
 
@@ -100,6 +98,13 @@ public class Zoo {
         return foundEnclosure.removeAnimal(foundAnimal);
     }
 
+    public Enclosure addEnclosure(String id, String speciesHoused, int capacity, float width, float height, float length) {
+        Enclosure newEnclosure = new Enclosure(id, speciesHoused, capacity, width, height, length);
+
+        enclosures.add(newEnclosure);
+        return newEnclosure;
+    }
+
     public Enclosure addEnclosure(String speciesHoused, int capacity, float width, float height, float length) {
         Enclosure newEnclosure = new Enclosure(speciesHoused, capacity, width, height, length);
 
@@ -115,6 +120,16 @@ public class Zoo {
                 .orElse(null);
 
         return foundEnclosure != null && enclosures.remove(foundEnclosure);
+    }
+
+    public Zookeeper addZookeeper(String id, String name, String job, Sex sex, int salary, int workedMonths, String password) {
+        Zookeeper newZookeeper = new Zookeeper(id, name, job, sex, password);
+        zookeepers.add(newZookeeper);
+
+        newZookeeper.setSalary(salary);
+        newZookeeper.increaseWorkedMonths(workedMonths);
+
+        return newZookeeper;
     }
 
     public Zookeeper addZookeeper(String name, String job, Sex sex, int salary, int workedMonths, String password) {

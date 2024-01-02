@@ -1,7 +1,10 @@
 package com.project.demo.controllers;
 
+import com.project.demo.Database.ZooDatabaseManager;
+import com.project.demo.Utils.Randoms;
 import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.Sex;
+import com.project.demo.Zoo.Zoo;
 import com.project.demo.ZooApplication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -41,6 +44,7 @@ public class ZookeeperInputController {
         try {
             String viewPath = (String) clickedButton.getUserData();
             if (viewPath.contains("enclosure-input-view")) EnclosureInputController.setViewMode(getViewMode());
+            if (viewPath.contains("main-view")) ZooApplication.zoo = new Zoo();
 
             ZookeeperInputController.setViewMode(ViewModes.INPUT);
             ZooApplication.changeScene(viewPath);
@@ -85,14 +89,13 @@ public class ZookeeperInputController {
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        ZooApplication.zoo.addZookeeper(
-                firstNameInput.getText() + " " + lastNameInput.getText(),
-                jobInput.getText(),
-                sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female,
-                yearlySalary,
-                workedMonths,
-                passwordEncoder.encode(passwordInput.getText())
-        );
+
+        String fullName = firstNameInput.getText() + " " + lastNameInput.getText();
+        String job = jobInput.getText();
+        Sex sex = sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female;
+        String hashedPassword = passwordEncoder.encode(passwordInput.getText());
+
+        ZooApplication.zoo.addZookeeper(fullName, job, sex, yearlySalary, workedMonths, hashedPassword);
 
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
         successAlert.setHeaderText("This zookeeper's details have been successfully configured.");

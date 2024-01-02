@@ -1,8 +1,10 @@
 package com.project.demo.controllers;
 
+import com.project.demo.Database.ZooDatabaseManager;
 import com.project.demo.Exceptions.EnclosureCapacityExceededException;
 import com.project.demo.Exceptions.MissingEnclosureException;
 import com.project.demo.Utils.Authenticator;
+import com.project.demo.Utils.Constants;
 import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.*;
 import com.project.demo.ZooApplication;
@@ -10,6 +12,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+
+import java.sql.*;
 
 public class AnimalInputController {
     public TextField nameInput;
@@ -22,6 +27,8 @@ public class AnimalInputController {
 
 
     private static ViewModes viewMode = ViewModes.INPUT;
+    public AnchorPane inputsContainer;
+    public Button submitButton;
 
     public static void setViewMode(ViewModes viewMode) {
         AnimalInputController.viewMode = viewMode;
@@ -41,8 +48,12 @@ public class AnimalInputController {
         if (!(eventSource instanceof Button clickedButton)) return;
 
         try {
+            String viewPath = (String) clickedButton.getUserData();
+
             AnimalInputController.setViewMode(ViewModes.INPUT);
-            ZooApplication.changeScene((String) clickedButton.getUserData());
+            if (viewPath.contains("main-view")) ZooApplication.zoo = new Zoo();
+
+            ZooApplication.changeScene(viewPath);
         } catch (Exception error) {
             System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
             Platform.exit();
@@ -71,8 +82,13 @@ public class AnimalInputController {
         if (age < 0)
             errorsMessageBuilder.append("The age of the animal must be positive.");
 
+        String name = nameInput.getText();
+        String species = speciesInput.getText();
+        Sex sex = sexChoiceInput.getSelectionModel().getSelectedIndex() == -1 ? Sex.male : Sex.female;
+        boolean healthy = healthinessInput.isSelected();
+
         try {
-            ZooApplication.zoo.addAnimal(nameInput.getText(), speciesInput.getText(), sexChoiceInput.getSelectionModel().getSelectedIndex() == -1 ? Sex.male : Sex.female, age, healthinessInput.isSelected());
+            ZooApplication.zoo.addAnimal(name, species, sex, age, healthy);
         } catch (EnclosureCapacityExceededException | MissingEnclosureException e) {
             errorsMessageBuilder.append(e.getMessage());
         }
@@ -104,6 +120,27 @@ public class AnimalInputController {
     }
 
     public void finishSetup(ActionEvent actionEvent) {
+        inputsContainer.getChildren().clear();
+        submitButton.setDisable(true);
+        finishSetupButton.setDisable(true);
+
+        Label addingEverythingToDatabaseLabel = new Label("Adding everything to the database...");
+        addingEverythingToDatabaseLabel.getStyleClass().add("generic-centered-label");
+        inputsContainer.getChildren().add(addingEverythingToDatabaseLabel);
+
+        boolean didAddEverythingToDB =
+                ZooDatabaseManager.tryInsertBatchEnclosuresAndAnimals(ZooApplication.zoo) &&
+                        ZooDatabaseManager.tryInsertBatchZookeepers(ZooApplication.zoo);
+
+        if (!didAddEverythingToDB) {
+            Alert dbInsertionErrorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
+            dbInsertionErrorAlert.setTitle("DB Update error");
+            dbInsertionErrorAlert.setHeaderText("There's been an error adding something to the database. Aborting...");
+            dbInsertionErrorAlert.show();
+            return;
+        }
+
+
         System.out.println("Admin: ");
         Admin admin = ZooApplication.zoo.admin;
         System.out.printf("%s %s %s %d %d\n", admin.name, admin.sex, admin.password, admin.getSalary(), admin.getWorkedMonths());

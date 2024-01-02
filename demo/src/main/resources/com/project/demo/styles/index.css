@@ -58,7 +58,7 @@
     -fx-text-fill: #75A76D;
 }
 
-.nothing-found-label {
+.generic-centered-label {
     -fx-text-fill: #75A76D;
     -fx-font-weight: bold;
     -fx-text-alignment: center;

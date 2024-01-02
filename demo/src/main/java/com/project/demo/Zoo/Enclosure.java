@@ -2,48 +2,42 @@ package com.project.demo.Zoo;
 
 
 import com.project.demo.Exceptions.EnclosureCapacityExceededException;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import com.project.demo.Utils.Randoms;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.UUID;
 
 public class Enclosure implements ISpace, Comparable<Enclosure> {
     private String id;
 
-    @NotNull(message = "Missing what species an enclosure should house")
     public String speciesHoused;
 
-    @PositiveOrZero(message = "Missing capacity of an enclosure")
     public int capacity;
 
-    public ArrayList<@Valid Animal> animals = new ArrayList<>(1);
+    public ArrayList<Animal> animals = new ArrayList<>();
 
-    @Positive(message = "Missing width, height or length of an enclosure")
     private float width, height, length;
 
-    public Enclosure() {
-        this.id = null;
-        this.speciesHoused = null;
-        this.capacity = -1;
-        this.width = -1;
-        this.height = -1;
-        this.length = -1;
-    }
-
-    public Enclosure(String speciesHoused, int capacity, float width, float height, float length) {
-        Random random = new Random();
-        this.id = String.valueOf(random.nextInt(9999 - 1000) + 1000);
+    public Enclosure(String id, String speciesHoused, int capacity, float width, float height, float length) {
+        this.id = id;
         this.speciesHoused = speciesHoused;
         this.capacity = capacity;
         this.width = width;
         this.height = height;
         this.length = length;
     }
+
+
+    public Enclosure(String speciesHoused, int capacity, float width, float height, float length) {
+        this.id = String.valueOf(Randoms.getRandomNumberBetween(1000, 9999));
+        this.speciesHoused = speciesHoused;
+        this.capacity = capacity;
+        this.width = width;
+        this.height = height;
+        this.length = length;
+    }
+
+
 
     void addAnimal(Animal animal) throws EnclosureCapacityExceededException {
         if (capacity == 0) throw new EnclosureCapacityExceededException("There is no more space for animal " + animal.name);
@@ -101,12 +95,12 @@ public class Enclosure implements ISpace, Comparable<Enclosure> {
         this.length = length;
     }
 
-    @Override @JsonIgnore
+    @Override
     public float getArea() {
         return width * height;
     }
 
-    @Override @JsonIgnore
+    @Override
     public float getVolume() {
         return width * height * length;
     }

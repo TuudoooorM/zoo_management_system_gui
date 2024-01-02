@@ -13,7 +13,7 @@
 <VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.AnimalInputController">
    <HBox alignment="CENTER_LEFT" fillHeight="false" minHeight="70.0" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
       <children>
-          <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05" userData="browsing-view.fxml">
+          <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05" userData="main-view.fxml">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>
@@ -42,7 +42,7 @@
                   <Font name="Montserrat Black" size="14.0" />
               </font>
           </Button>
-          <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitAnimalInput" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+          <Button fx:id="submitButton" minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitAnimalInput" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
@@ -52,9 +52,9 @@
          </Button>
       </children>
    </HBox>
-   <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="490.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+   <ScrollPane  fitToWidth="true" prefHeight="200.0" prefWidth="490.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
      <content>
-       <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;">
+       <AnchorPane fx:id="inputsContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;">
             <children>
                <VBox alignment="CENTER_LEFT" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                   <children>

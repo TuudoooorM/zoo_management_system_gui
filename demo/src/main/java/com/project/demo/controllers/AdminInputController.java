@@ -1,7 +1,9 @@
 package com.project.demo.controllers;
 
+import com.project.demo.Database.ZooDatabaseManager;
 import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.Sex;
+import com.project.demo.Zoo.Zoo;
 import com.project.demo.ZooApplication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -56,14 +58,20 @@ public class AdminInputController extends DefaultController {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+        String fullName = firstNameInput.getText() + " " + lastNameInput.getText();
+        Sex sex = sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female;
+        String hashedPassword = passwordEncoder.encode(passwordInput.getText());
+
+        boolean didAddAdmin = ZooDatabaseManager.tryAddAdmin(fullName, sex, yearlySalary, workedMonths, hashedPassword);
+
+        if (!didAddAdmin) {
+            errorAlert.setContentText("There's been an error adding the admin to the database. Please try again.");
+            errorAlert.show();
+            return;
+        }
+
         ZooApplication.zoo.name = zooNameInput.getText();
-        ZooApplication.zoo.setAdmin(
-                firstNameInput.getText() + " " + lastNameInput.getText(),
-                sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female,
-                yearlySalary,
-                workedMonths,
-                passwordEncoder.encode(passwordInput.getText())
-        );
+        ZooApplication.zoo.setAdmin(fullName, sex, yearlySalary, workedMonths, hashedPassword);
 
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
         successAlert.setHeaderText("The admin details have been successfully configured.");

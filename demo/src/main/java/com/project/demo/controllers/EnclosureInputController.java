@@ -1,6 +1,9 @@
 package com.project.demo.controllers;
 
+import com.project.demo.Database.ZooDatabaseManager;
+import com.project.demo.Utils.Randoms;
 import com.project.demo.Utils.ViewModes;
+import com.project.demo.Zoo.Zoo;
 import com.project.demo.ZooApplication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -38,6 +41,7 @@ public class EnclosureInputController {
         try {
             String viewPath = (String) clickedButton.getUserData();
             if (viewPath.contains("animal-input-view")) AnimalInputController.setViewMode(getViewMode());
+            if (viewPath.contains("main-view")) ZooApplication.zoo = new Zoo();
 
             EnclosureInputController.setViewMode(ViewModes.INPUT);
             ZooApplication.changeScene(viewPath);
@@ -63,25 +67,25 @@ public class EnclosureInputController {
             errorsMessageBuilder.append("The capacity must be a number.\n");
         }
 
-        int width = -1;
+        float width = -1;
         try {
-            width = Integer.parseInt(widthInput.getText());
+            width = Float.parseFloat(widthInput.getText());
         } catch (NumberFormatException error) {
-            errorsMessageBuilder.append("The width input must receive a number.\n");
+            errorsMessageBuilder.append("The width input must receive a whole number, or a decimal number.\n");
         }
 
-        int height = -1;
+        float height = -1;
         try {
-            height = Integer.parseInt(heightInput.getText());
+            height = Float.parseFloat(heightInput.getText());
         } catch (NumberFormatException error) {
-            errorsMessageBuilder.append("The height input must receive a number.\n");
+            errorsMessageBuilder.append("The height input must receive a whole number, or a decimal number.\n");
         }
 
-        int length = -1;
+        float length = -1;
         try {
-            length = Integer.parseInt(lengthInput.getText());
+            length = Float.parseFloat(lengthInput.getText());
         } catch (NumberFormatException error) {
-            errorsMessageBuilder.append("The length input must receive a number.\n");
+            errorsMessageBuilder.append("The length input must receive a whole number, or a decimal number.\n");
         }
 
         if (!errorsMessageBuilder.isEmpty()) {

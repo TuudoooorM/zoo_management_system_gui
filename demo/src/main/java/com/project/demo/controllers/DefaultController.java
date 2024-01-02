@@ -15,7 +15,6 @@ import java.io.IOException;
 
 
 public class DefaultController {
-
     public void navigateToView(ActionEvent actionEvent) {
         Object eventSource = actionEvent.getSource();
         if (!(eventSource instanceof Button clickedButton)) return;

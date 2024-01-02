@@ -1,7 +1,15 @@
 package com.project.demo.Utils;
 
 public abstract class Constants {
-    public static final String DATABASE_FILE_PATH = "src/Database/db.json";
-    public static final String WELCOME_MESSAGE = "Welcome!";
-    public static final int WELCOME_MESSAGE_LINE_SIZE = 70;
+    public static final String DATABASE_SERVER_HOST = "localhost";
+    public static final int DATABASE_SERVER_PORT = 3306;
+    public static final String DATABASE_NAME = "zoo";
+
+    public static final String CONNECTION_URL = String.format(
+            "jdbc:mariadb://%s:%d/%s",
+            DATABASE_SERVER_HOST,
+            DATABASE_SERVER_PORT,
+            DATABASE_NAME
+    );
+
 }
