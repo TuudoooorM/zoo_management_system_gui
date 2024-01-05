@@ -3,6 +3,7 @@ package com.project.demo.controllers;
 import com.project.demo.Database.ZooDatabaseManager;
 import com.project.demo.Utils.Randoms;
 import com.project.demo.Utils.ViewModes;
+import com.project.demo.Zoo.Enclosure;
 import com.project.demo.Zoo.Zoo;
 import com.project.demo.ZooApplication;
 import javafx.application.Platform;
@@ -41,6 +42,8 @@ public class EnclosureInputController {
         try {
             String viewPath = (String) clickedButton.getUserData();
             if (viewPath.contains("animal-input-view")) AnimalInputController.setViewMode(getViewMode());
+
+            // Reset the zoo state so far if the user ever chooses to abort.
             if (viewPath.contains("main-view")) ZooApplication.zoo = new Zoo();
 
             EnclosureInputController.setViewMode(ViewModes.INPUT);
@@ -94,10 +97,10 @@ public class EnclosureInputController {
             return;
         }
 
-        ZooApplication.zoo.addEnclosure(speciesInput.getText(), capacity, width, height, length);
+        Enclosure addedEnclosure = ZooApplication.zoo.addEnclosure(speciesInput.getText(), capacity, width, height, length);
 
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
-        successAlert.setHeaderText("This enclosure's details have been successfully configured.");
+        successAlert.setHeaderText("This enclosure's details have been successfully configured. Its ID is: " + addedEnclosure.getId());
         successAlert.setTitle("Enclosure input success");
         successAlert.show();
 

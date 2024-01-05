@@ -8,18 +8,16 @@ public class Admin implements IEmployed {
 
     public final Sex sex;
 
-    public final String password;
-
-    public Admin() {
-        this.name = null;
-        this.sex = null;
-        this.password = null;
-    }
+    private final String password;
 
     public Admin(String name, Sex sex, String password) {
         this.name = name;
         this.sex = sex;
         this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     @Override

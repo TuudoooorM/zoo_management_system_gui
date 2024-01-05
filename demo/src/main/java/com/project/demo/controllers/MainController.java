@@ -12,19 +12,21 @@ import java.io.IOException;
 public class MainController extends DefaultController {
 
     public void setUpNewZoo(ActionEvent actionEvent) {
+        Alert clearError = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
+        clearError.setTitle("Clear error");
+        boolean didClearConfigFile = ZooDatabaseManager.clearConfigFile();
         boolean didClearAllTables = ZooDatabaseManager.clearAllTables();
-        if (!didClearAllTables) {
-            Alert clearTableError = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
-            clearTableError.setTitle("Table clear error");
-            clearTableError.setHeaderText("There was an error purging the database. Please try again.");
+
+        if (!didClearConfigFile) {
+            clearError.setHeaderText("There was an error clearing the config file. Please try again.");
             return;
         }
 
-        try {
-            ZooApplication.changeScene("admin-input-view.fxml");
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            Platform.exit();
+        if (!didClearAllTables) {
+            clearError.setHeaderText("There was an error purging the database. Please try again.");
+            return;
         }
+
+       super.navigateToView(actionEvent);
     }
 }

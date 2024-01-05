@@ -1,18 +1,9 @@
 package com.project.demo.controllers;
 
-import com.project.demo.Utils.Authenticator;
-import com.project.demo.Zoo.Privileges;
 import com.project.demo.ZooApplication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-
-import java.io.IOException;
-
 
 public class DefaultController {
     public void navigateToView(ActionEvent actionEvent) {
@@ -26,5 +17,4 @@ public class DefaultController {
             Platform.exit();
         }
     }
-
 }

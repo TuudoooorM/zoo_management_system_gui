@@ -30,7 +30,7 @@
                       </font>
                   </Text>
                <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-               <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitAdminLoginDetails" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+               <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitAdminLoginDetails" userData="browsing-view.fxml" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
                   <cursor>
                      <Cursor fx:constant="HAND" />
                   </cursor>

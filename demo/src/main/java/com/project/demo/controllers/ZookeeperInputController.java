@@ -5,6 +5,7 @@ import com.project.demo.Utils.Randoms;
 import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.Sex;
 import com.project.demo.Zoo.Zoo;
+import com.project.demo.Zoo.Zookeeper;
 import com.project.demo.ZooApplication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -44,6 +45,7 @@ public class ZookeeperInputController {
         try {
             String viewPath = (String) clickedButton.getUserData();
             if (viewPath.contains("enclosure-input-view")) EnclosureInputController.setViewMode(getViewMode());
+            // Reset the zoo state so far if the user ever chooses to abort.
             if (viewPath.contains("main-view")) ZooApplication.zoo = new Zoo();
 
             ZookeeperInputController.setViewMode(ViewModes.INPUT);
@@ -95,10 +97,11 @@ public class ZookeeperInputController {
         Sex sex = sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female;
         String hashedPassword = passwordEncoder.encode(passwordInput.getText());
 
-        ZooApplication.zoo.addZookeeper(fullName, job, sex, yearlySalary, workedMonths, hashedPassword);
+        Zookeeper addedZookeeper =
+                ZooApplication.zoo.addZookeeper(fullName, job, sex, yearlySalary, workedMonths, hashedPassword);
 
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
-        successAlert.setHeaderText("This zookeeper's details have been successfully configured.");
+        successAlert.setHeaderText("This zookeeper's details have been successfully configured. Their ID is: " + addedZookeeper.getId());
         successAlert.setTitle("Zookeeper input success");
         successAlert.show();
 

@@ -4,10 +4,14 @@ import com.project.demo.Exceptions.EnclosureCapacityExceededException;
 import com.project.demo.Exceptions.MissingEnclosureException;
 import com.project.demo.Utils.Constants;
 import com.project.demo.Zoo.*;
+import com.project.demo.ZooApplication;
+import javafx.application.Platform;
+import javafx.util.Pair;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.sql.*;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ZooDatabaseManager {
@@ -21,7 +25,7 @@ public class ZooDatabaseManager {
 
     public static boolean clearTableRows(String tableName) {
         try {
-            query("TRUNCATE TABLE " + tableName);
+            query("DELETE FROM " + tableName);
             return true;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -31,6 +35,21 @@ public class ZooDatabaseManager {
 
     public static boolean clearAllTables() {
         return clearTableRows("zookeepers") && clearTableRows("enclosures") && clearTableRows("animals");
+    }
+
+    public static boolean clearConfigFile() {
+        URL configFilePathURL = ZooApplication.class.getResource("config");
+        if (configFilePathURL == null) {
+            Platform.exit();
+            return false;
+        }
+        String configFilePath = configFilePathURL.getPath() + "config.ini";
+        try (FileWriter ignored = new FileWriter(configFilePath, false)) {
+            return true;
+        } catch (IOException e) {
+            System.err.println("Could not clear config file. Reason: " + e.getMessage());
+            return false;
+        }
     }
 
     public static boolean loadAnimals(Zoo zoo) {
@@ -72,6 +91,44 @@ public class ZooDatabaseManager {
         }
     }
 
+    public static Pair<Zookeeper, String> tryFindZookeeper(String zookeeperIDRaw) {
+        if (zookeeperIDRaw.length() != Constants.ID_SIZE) return new Pair<>(null, "ID length is incorrect");
+
+        int zookeeperID;
+        try {
+            zookeeperID = Integer.parseInt(zookeeperIDRaw);
+        } catch (NumberFormatException ignored) {
+            return new Pair<>(null, "ID format is incorrect");
+        }
+
+        try (Connection connection = DriverManager.getConnection(Constants.CONNECTION_URL, "root", "admin")) {
+            PreparedStatement zookeeperSearchStatement = connection.prepareStatement("SELECT * FROM zookeepers WHERE id = ? LIMIT 1");
+            setPreparedParameters(zookeeperSearchStatement, zookeeperID);
+
+            ResultSet zookeepersResultSet = zookeeperSearchStatement.executeQuery();
+            while(zookeepersResultSet.next()) {
+                String name = zookeepersResultSet.getString("name");
+                Sex sex = zookeepersResultSet.getInt("sex") == 0 ? Sex.male : Sex.female;
+                int salary = zookeepersResultSet.getInt("salary");
+                int workedMonths = zookeepersResultSet.getInt("worked_months");
+                String job = zookeepersResultSet.getString("job");
+                if (job.equals("null")) job = "";
+
+                String password = zookeepersResultSet.getString("password");
+
+                Zookeeper foundZookeeper = new Zookeeper(zookeeperIDRaw, name, job, sex, password);
+                foundZookeeper.setSalary(salary);
+                foundZookeeper.increaseWorkedMonths(workedMonths);
+                return new Pair<>(foundZookeeper, null);
+            }
+
+            return new Pair<>(null, "There's no zookeeper with this ID");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            return new Pair<>(null, "There has been an internal error accessing zookeeper data");
+        }
+    }
+
     public static boolean loadZookeepers(Zoo zoo) {
         try (ResultSet zookeepersResultSet = query("SELECT * FROM zookeepers")) {
             while (zookeepersResultSet.next()) {
@@ -95,14 +152,30 @@ public class ZooDatabaseManager {
         }
     }
 
-    public static boolean tryAddAdmin(String fullName, Sex sex, int yearlySalary, int workedMonths, String hashedPassword) {
-//        try (Connection connection = DriverManager.getConnection(Constants.CONNECTION_URL, "root", "admin")) {
-//            PreparedStatement queryStatement = connection.prepareStatement("INSERT INTO employees (id,) VALUES ");
-//
-//            return queryStatement.executeQuery();
-//        }
-        // TODO: this
-        return true;
+    public static boolean tryAddAdminAndZooName(String zooName, String fullName, Sex sex, int yearlySalary, int workedMonths, String hashedPassword) {
+        URL configFileURL = ZooApplication.class.getResource("config");
+        if (configFileURL == null) {
+            System.err.println("File path of config file is null.");
+            return false;
+        }
+        String configFilePath = configFileURL.getPath() + "config.ini";
+        System.out.println(configFilePath);
+
+        try (Writer configFileWriter = new FileWriter(configFilePath, false)) {
+            configFileWriter.write(
+                    String.format("""
+                            name=%s
+                            admin_name=%s
+                            admin_sex=%d
+                            admin_password=%s
+                            admin_salary=%d
+                            admin_worked_months=%d"""
+            , zooName, fullName, sex.ordinal(), hashedPassword, yearlySalary, workedMonths));
+            return true;
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return false;
+        }
     }
 
 
@@ -133,7 +206,7 @@ public class ZooDatabaseManager {
             String enclosuresInsertionQuery = "INSERT INTO enclosures (id, species, capacity, width, height, length) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement enclosuresStatement = connection.prepareStatement(enclosuresInsertionQuery);
 
-            String animalsInsertionQuery = "INSERT INTO animals (name, species, sex, age, healthy) VALUES (?, ?, ?, ?, ?)";
+            String animalsInsertionQuery = "INSERT INTO animals (enclosure_id, name, species, sex, age, healthy) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement animalsStatement = connection.prepareStatement(animalsInsertionQuery);
             for (Enclosure enclosure : zoo.enclosures) {
                 setPreparedParameters(enclosuresStatement,
@@ -145,7 +218,7 @@ public class ZooDatabaseManager {
                 for (Animal animal : enclosure.animals) {
                     setPreparedParameters(
                             animalsStatement,
-                            animal.name, animal.species, animal.sex.ordinal(), animal.age, animal.healthy
+                            enclosure.getId(), animal.name, animal.species, animal.sex.ordinal(), animal.age, animal.healthy
                     );
                     animalsStatement.addBatch();
                 }
@@ -162,19 +235,16 @@ public class ZooDatabaseManager {
 
     public static void setPreparedParameters(PreparedStatement queryStatement, Object... data) throws SQLException {
         for (int i = 0; i < data.length; i++) {
-            if (data[i] instanceof String)
-                queryStatement.setString(i + 1, (String) data[i]);
-            else if (data[i] instanceof Integer)
-                queryStatement.setInt(i + 1, (Integer) data[i]);
-            else if (data[i] instanceof Float)
-                queryStatement.setFloat(i + 1, (Float) data[i]);
-            else
-                queryStatement.setObject(i + 1, data[i]); // TODO: check
+            switch (data[i]) {
+                case String stringParameter -> queryStatement.setString(i + 1, stringParameter);
+                case Integer integerParameter -> queryStatement.setInt(i + 1, integerParameter);
+                case Float floatParameter -> queryStatement.setFloat(i + 1, floatParameter);
+                case null, default -> queryStatement.setObject(i + 1, data[i]);
+            }
         }
     }
 
-    public static boolean tryInsertPrepared(String query, Object... data) {
-        // TODO: debug
+    public static boolean tryQueryPreparedStatement(String query, Object... data) {
         try (Connection connection = DriverManager.getConnection(Constants.CONNECTION_URL, "root", "admin")) {
             PreparedStatement queryStatement = connection.prepareStatement(query);
             setPreparedParameters(queryStatement, data);
@@ -186,80 +256,81 @@ public class ZooDatabaseManager {
         }
     }
 
-    /*
-    C:\Users\matei\.jdks\openjdk-21\bin\java.exe
-    "-javaagent:F:\IntelliJ IDEA 2023.2.2\lib\idea_rt.jar=60150:F:\IntelliJ IDEA 2023.2.2\bin"
-    -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8
-    -classpath C:\Users\matei\.m2\repository\org\openjfx\javafx-controls\21-ea+24\javafx-controls-21-ea+24.jar;
-    C:\Users\matei\.m2\repository\org\openjfx\javafx-graphics\21-ea+24\javafx-graphics-21-ea+24.jar;
-    C:\Users\matei\.m2\repository\org\openjfx\javafx-base\21-ea+24\javafx-base-21-ea+24.jar;
-    C:\Users\matei\.m2\repository\org\openjfx\javafx-fxml\21-ea+24\javafx-fxml-21-ea+24.jar;
-    C:\Users\matei\.m2\repository\org\springframework\spring-aop\6.1.2\spring-aop-6.1.2.jar;
-    C:\Users\matei\.m2\repository\org\springframework\spring-beans\6.1.2\spring-beans-6.1.2.jar;C:\Users\matei\.m2\repository\org\springframework\spring-context\6.1.2\spring-context-6.1.2.jar;C:\Users\matei\.m2\repository\org\springframework\spring-core\6.1.2\spring-core-6.1.2.jar;C:\Users\matei\.m2\repository\org\springframework\spring-jcl\6.1.2\spring-jcl-6.1.2.jar;C:\Users\matei\.m2\repository\org\springframework\spring-expression\6.1.2\spring-expression-6.1.2.jar;C:\Users\matei\.m2\repository\io\micrometer\micrometer-observation\1.12.1\micrometer-observation-1.12.1.jar;C:\Users\matei\.m2\repository\io\micrometer\micrometer-commons\1.12.1\micrometer-commons-1.12.1.jar;C:\Users\matei\.m2\repository\org\slf4j\jcl-over-slf4j\2.0.7\jcl-over-slf4j-2.0.7.jar;C:\Users\matei\.m2\repository\com\github\ben-manes\caffeine\caffeine\2.9.3\caffeine-2.9.3.jar;C:\Users\matei\.m2\repository\com\google\errorprone\error_prone_annotations\2.10.0\error_prone_annotations-2.10.0.jar;C:\Users\matei\.m2\repository\org\checkerframework\checker-qual\3.32.0\checker-qual-3.32.0.jar -p C:\Users\matei\.m2\repository\com\github\waffle\waffle-jna\3.3.0\waffle-jna-3.3.0.jar;C:\Users\matei\.m2\repository\org\kordamp\ikonli\ikonli-core\12.3.1\ikonli-core-12.3.1.jar;C:\Users\matei\.m2\repository\org\mariadb\jdbc\mariadb-java-client\3.3.2\mariadb-java-client-3.3.2.jar;C:\Users\matei\.m2\repository\org\openjfx\javafx-graphics\21-ea+24\javafx-graphics-21-ea+24-win.jar;C:\Users\matei\.m2\repository\org\openjfx\javafx-controls\21-ea+24\javafx-controls-21-ea+24-win.jar;C:\Users\matei\.m2\repository\org\kordamp\ikonli\ikonli-fontawesome5-pack\12.3.1\ikonli-fontawesome5-pack-12.3.1.jar;C:\Users\matei\.m2\repository\net\java\dev\jna\jna\5.13.0\jna-5.13.0.jar;C:\Users\matei\.m2\repository\net\java\dev\jna\jna-platform\5.13.0\jna-platform-5.13.0.jar;C:\Users\matei\.m2\repository\org\openjfx\javafx-base\21-ea+24\javafx-base-21-ea+24-win.jar;C:\Users\matei\.m2\repository\org\springframework\security\spring-security-core\6.2.1\spring-security-core-6.2.1.jar;F:\P3_Project_JavaFX\demo\target\classes;C:\Users\matei\.m2\repository\org\kordamp\ikonli\ikonli-javafx\12.3.1\ikonli-javafx-12.3.1.jar;C:\Users\matei\.m2\repository\net\synedra\validatorfx\0.4.0\validatorfx-0.4.0.jar;C:\Users\matei\.m2\repository\org\openjfx\javafx-fxml\21-ea+24\javafx-fxml-21-ea+24-win.jar;C:\Users\matei\.m2\repository\org\slf4j\slf4j-api\2.0.7\slf4j-api-2.0.7.jar;C:\Users\matei\.m2\repository\org\springframework\security\spring-security-crypto\6.2.1\spring-security-crypto-6.2.1.jar -m com.project.demo/com.project.demo.ZooApplication
-     */
-
-    private static Zoo loadConfig() {
-        // FIXME: path error. obviously >_>
-        try (Scanner scanner = new Scanner(new FileInputStream("config/config.ini"))) {
-            if (!scanner.hasNextLine()) return null;
+    private static Pair<Zoo, String> loadConfig() {
+        try (Scanner scanner = new Scanner(
+                Objects.requireNonNull(
+                        ZooApplication.class.getResourceAsStream("config/config.ini")
+                )
+        )) {
+            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");
             String[] zooNameRaw = scanner.nextLine().split("=");
             // name=the zoo name -> [name, the zoo name]
-            if (zooNameRaw.length != 2) return null;
+            if (zooNameRaw.length != 2 || !zooNameRaw[0].equals("name"))
+                return new Pair<>(null, "Malformed zoo name");
             String zooName = zooNameRaw[1];
 
-            if (!scanner.hasNextLine()) return null;
+            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");
             String[] adminNameRaw = scanner.nextLine().split("=");
-            if (adminNameRaw.length != 2) return null;
+            if (adminNameRaw.length != 2 || !adminNameRaw[0].equals("admin_name"))
+                return new Pair<>(null, "Malformed admin name");
             String adminName = adminNameRaw[1];
 
-            if (!scanner.hasNextLine()) return null;
+            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");;
             String[] adminSexRaw = scanner.nextLine().split("=");
-            if (adminSexRaw.length != 2) return null;
-            if (!adminSexRaw[1].equals("0") && !adminSexRaw[1].equals("1")) return null;
+            if (adminSexRaw.length != 2 || !adminSexRaw[0].equals("admin_sex"))
+                return new Pair<>(null, "Malformed admin sex");
+            if (!adminSexRaw[1].equals("0") && !adminSexRaw[1].equals("1"))
+                return new Pair<>(null, "Malformed admin sex value (not a 0 or a 1)");
             Sex adminSex = adminSexRaw[1].equals("0") ? Sex.male : Sex.female;
 
-            if (!scanner.hasNextLine()) return null;
+            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");
             String[] adminPasswordRaw = scanner.nextLine().split("=");
-            if (adminPasswordRaw.length != 2) return null;
+            if (adminPasswordRaw.length != 2 || !adminPasswordRaw[0].equals("admin_password"))
+                return new Pair<>(null, "Malformed admin password");
             String adminPassword = adminPasswordRaw[1];
 
-
-            if (!scanner.hasNextLine()) return null;
+            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");
             String[] adminSalaryRaw = scanner.nextLine().split("=");
-            if (adminSalaryRaw.length != 2) return null;
+            if (adminSalaryRaw.length != 2 || !adminSalaryRaw[0].equals("admin_salary"))
+                return new Pair<>(null, "Malformed admin salary");
+
             int adminSalary;
             try {
                 adminSalary = Integer.parseInt(adminSalaryRaw[1]);
             } catch (NumberFormatException ignored) {
-                return null;
+                return new Pair<>(null, "Malformed admin salary value (it's not a number)");
             }
 
-            if (!scanner.hasNextLine()) return null;
+            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");
             String[] adminWorkedMonthsRaw = scanner.nextLine().split("=");
-            if (adminWorkedMonthsRaw.length != 2) return null;
+            if (adminWorkedMonthsRaw.length != 2 || !adminWorkedMonthsRaw[0].equals("admin_worked_months"))
+                return new Pair<>(null, "Malformed admin worked months count");
+
             int adminWorkedMonths;
             try {
                 adminWorkedMonths = Integer.parseInt(adminWorkedMonthsRaw[1]);
             } catch (NumberFormatException ignored) {
-                return null;
+                return new Pair<>(null, "Malformed admin worked months count (it's not a number");
             }
 
             Zoo zoo = new Zoo(zooName);
             zoo.setAdmin(adminName, adminSex, adminSalary, adminWorkedMonths, adminPassword);
-            return zoo;
-        } catch (IOException error) {
-            System.err.println(error.getMessage());
-            return null;
+            return new Pair<>(zoo, null);
+        } catch (NullPointerException e) {
+            System.err.println(e.getMessage());
+            return new Pair<>(null, "There's been an internal error regarding the config file (doesn't exist).");
         }
     }
 
-    public static Zoo load() {
-        Zoo zoo = loadConfig();
-        if (zoo == null) return null;
+    public static Pair<Zoo, String> load() {
+        Pair<Zoo, String> zooData = loadConfig();
+        if (zooData.getValue() != null) return zooData;
+
+        Zoo zoo = zooData.getKey();
 
         boolean loadResult = ZooDatabaseManager.loadZookeepers(zoo) && ZooDatabaseManager.loadEnclosures(zoo) && ZooDatabaseManager.loadAnimals(zoo);
-        if (!loadResult) return null;
+        if (!loadResult) return new Pair<>(null, "There's been an error loading zoo data.");
 
-        return zoo;
+        return zooData;
     }
 }

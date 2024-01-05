@@ -12,14 +12,6 @@ public class Animal implements Comparable<Animal> {
 
     public boolean healthy;
 
-    public Animal() {
-        this.name = null;
-        this.species = null;
-        this.sex = null;
-        this.age = -1;
-        this.healthy = false;
-    }
-
     public Animal(String name, String species, Sex sex, int age, boolean healthy) {
         this.name = name;
         this.species = species;

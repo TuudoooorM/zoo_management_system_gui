@@ -5,7 +5,6 @@ import com.project.demo.Utils.Randoms;
 public class Zookeeper implements IEmployed {
     private int salary = 0, workedMonths = 0;
 
-
     private final String id;
 
     public final String name;
@@ -48,11 +47,6 @@ public class Zookeeper implements IEmployed {
     public String getJob() {
         return job;
     }
-
-    public void setJob(String newJob) {
-        job = newJob;
-    }
-
 
     @Override
     public int getSalary() {

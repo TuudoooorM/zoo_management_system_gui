@@ -35,7 +35,7 @@
             </padding>
          </Region>
 
-         <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitAdminInput" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
+         <Button minHeight="40.0" minWidth="150.0" mnemonicParsing="false" onAction="#submitAdminInput" userData="zookeeper-input-view.fxml" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Submit" textAlignment="CENTER" textFill="#091e05">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>

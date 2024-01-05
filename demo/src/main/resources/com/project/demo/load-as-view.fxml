@@ -21,7 +21,7 @@
     </VBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
           <children>
-              <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#loadDBAndNavigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Guest" textAlignment="CENTER" textFill="#091e05" userData="browsing-view.fxml">
+              <Button layoutX="199.0" layoutY="10.0" mnemonicParsing="false" onAction="#navigateToView" prefHeight="102.0" prefWidth="201.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" text="Guest" textAlignment="CENTER" textFill="#091e05" userData="browsing-view.fxml">
                   <cursor>
                       <Cursor fx:constant="HAND" />
                   </cursor>

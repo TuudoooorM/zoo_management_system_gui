@@ -34,7 +34,7 @@
                <Insets bottom="34.0" />
             </padding>
          </Region>
-          <Button fx:id="finishSetupButton" mnemonicParsing="false" onAction="#finishSetup" styleClass="secondary-button" text="Finish setup" textAlignment="CENTER" textFill="#091e05" userData="animal-input-view.fxml">
+          <Button fx:id="finishSetupButton" mnemonicParsing="false" onAction="#finishSetup" styleClass="secondary-button" text="Finish setup" textAlignment="CENTER" textFill="#091e05" userData="browsing-view.fxml">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>

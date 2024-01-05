@@ -1,9 +1,9 @@
 package com.project.demo.Zoo;
 
-import com.project.demo.Database.ZooDatabaseManager;
 import com.project.demo.Exceptions.EnclosureCapacityExceededException;
 import com.project.demo.Exceptions.MissingEnclosureException;
-import com.project.demo.Utils.Authenticator;
+import com.project.demo.ZooApplication;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,16 +34,6 @@ public class Zoo {
     }
 
     public int getSpeciesCount() {
-        if (!species.isEmpty()) {
-            System.out.println("Species size called.");
-            return species.size();
-        }
-        if (enclosures.isEmpty()) return 0;
-
-        // TODO: is this the case still? deserializing doesn't update species count, so after deserializing just take the distinct species from the enclosures
-        for (Enclosure enclosure : enclosures)
-            species.add(enclosure.speciesHoused);
-
         return species.size();
     }
 
@@ -58,13 +48,16 @@ public class Zoo {
         addAnimal(new Animal(name, species, sex, age, healthy));
     }
 
-    public void addAnimal(Animal animal) throws MissingEnclosureException, EnclosureCapacityExceededException {
-        Enclosure enclosureHousingThisSpecies = enclosures.
+    public Enclosure findEnclosureBySpecies(String species) {
+        return enclosures.
                 stream()
-                .filter(enclosure -> enclosure.speciesHoused.equalsIgnoreCase(animal.species))
+                .filter(enclosure -> enclosure.speciesHoused.equalsIgnoreCase(species))
                 .findFirst()
                 .orElse(null);
+    }
 
+    public void addAnimal(Animal animal) throws MissingEnclosureException, EnclosureCapacityExceededException {
+        Enclosure enclosureHousingThisSpecies = findEnclosureBySpecies(animal.species);
 
         if (enclosureHousingThisSpecies == null)
             throw new MissingEnclosureException("There is no such enclosure for animal species " + animal.species);
@@ -75,27 +68,23 @@ public class Zoo {
         enclosureHousingThisSpecies.addAnimal(animal);
     }
 
-    public boolean removeAnimal(String species, String name) {
-        Enclosure foundEnclosure = enclosures
-                .stream()
-                .filter(enclosure -> enclosure.speciesHoused.equals(species))
-                .findFirst()
-                .orElse(null);
-
-        if (foundEnclosure == null) return false;
+    public Pair<Animal, Enclosure> findAnimalInEnclosure(String species, String name) {
+        Enclosure foundEnclosure = findEnclosureBySpecies(species);
+        if (foundEnclosure == null) return null;
 
         Animal foundAnimal = foundEnclosure.animals
                 .stream()
-                .filter(animal -> {
-                    assert animal.name != null;
-                    return animal.name.equals(name);
-                })
+                .filter(animal -> animal.name.equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
 
-        if (foundAnimal == null) return false;
+        if (foundAnimal == null) return null;
 
-        return foundEnclosure.removeAnimal(foundAnimal);
+        return new Pair<>(foundAnimal, foundEnclosure);
+    }
+
+     public boolean removeAnimal(Enclosure enclosure, Animal animal) {
+        return enclosure.removeAnimal(animal);
     }
 
     public Enclosure addEnclosure(String id, String speciesHoused, int capacity, float width, float height, float length) {
@@ -112,14 +101,20 @@ public class Zoo {
         return newEnclosure;
     }
 
-    public boolean removeEnclosure(String enclosureID) {
-        Enclosure foundEnclosure = enclosures
+    public void addEnclosure(Enclosure enclosure) {
+        enclosures.add(enclosure);
+    }
+
+    public Enclosure findEnclosure(String enclosureID) {
+        return enclosures
                 .stream()
                 .filter(enclosure -> enclosure.getId().equals(enclosureID))
                 .findFirst()
                 .orElse(null);
+    }
 
-        return foundEnclosure != null && enclosures.remove(foundEnclosure);
+    public boolean removeEnclosure(Enclosure enclosure) {
+        return enclosures.remove(enclosure);
     }
 
     public Zookeeper addZookeeper(String id, String name, String job, Sex sex, int salary, int workedMonths, String password) {
@@ -142,65 +137,20 @@ public class Zoo {
         return newZookeeper;
     }
 
-    public boolean removeZookeeper(String zookeeperID) {
-        Zookeeper foundZookeeper = zookeepers
+    public void addZookeeper(Zookeeper zookeeper) {
+        zookeepers.add(zookeeper);
+    }
+
+    public Zookeeper findZookeeper(String zookeeperID) {
+        return zookeepers
                 .stream()
                 .filter(zookeeper -> zookeeper.getId().equals(zookeeperID))
                 .findFirst()
                 .orElse(null);
-
-        return foundZookeeper != null && zookeepers.remove(foundZookeeper);
     }
 
-    public void listAnimals() {
-        System.out.printf("Currently there %s %d animal%s in here.%n", getAnimalsCount() != 1 ? "are" : "is", getAnimalsCount(), getAnimalsCount() != 1 ? "s" : "");
-        System.out.println("Total species count: " + getSpeciesCount());
-        System.out.println("----------");
-
-        int count = 0;
-        ArrayList<Enclosure> sortedEnclosures = new ArrayList<>(enclosures);
-        sortedEnclosures.sort(Enclosure::compareTo);
-
-        for (Enclosure enclosure : sortedEnclosures) {
-            System.out.printf("Enclosure %d (id: %s) | %d animal(s) inside. Capacity: %d. Species housed: %s%n", count + 1, enclosure.getId(), enclosure.animals.size(), enclosure.capacity, enclosure.speciesHoused);
-            enclosure.listAnimals();
-            count++;
-        }
-    }
-
-    public void listEnclosures() {
-        System.out.printf("Currently there are %d enclosure(s) in here.%n", enclosures.size());
-        int count = 0;
-
-        ArrayList<Enclosure> sortedEnclosures = new ArrayList<>(enclosures);
-        sortedEnclosures.sort(Enclosure::compareTo);
-
-        for (Enclosure enclosure : sortedEnclosures) {
-            System.out.printf("Enclosure %d (id: %s)\n\tCapacity: %d. Area and volume: %.2fm^2 & %.2fm^3 Species housed: %s. Number of animals inside: %d%n", count + 1, enclosure.getId(), enclosure.capacity, enclosure.getArea(), enclosure.getVolume(), enclosure.speciesHoused, enclosure.animals.size());
-            count++;
-        }
-    }
-
-    public void listZookeepers() {
-        System.out.printf("Currently there are %d zookeeper(s) working here.%n", zookeepers.size());
-
-        if (Authenticator.privilege == Privileges.GUEST) {
-            System.err.println("You're not allowed to list zookeeper details.");
-            return;
-        }
-
-        if (Authenticator.privilege == Privileges.ZOOKEEPER) {
-            System.out.println("Only showing the details for you.");
-            Zookeeper zookeeper = (Zookeeper)Authenticator.employee;
-            System.out.printf("Zookeeper %s (id: %s) | Job: \"%s\". Salary: %d. Worked months: %d\n", zookeeper.name, zookeeper.getId(), zookeeper.getJob(), zookeeper.getSalary(), zookeeper.getWorkedMonths());
-            return;
-        }
-
-        int count = 0;
-        for (Zookeeper zookeeper : zookeepers) {
-            System.out.printf("Zookeeper %d -> %s, %s (id: %s) | Job: \"%s\". Salary: %d. Worked months: %d%n", count + 1, zookeeper.name, zookeeper.sex, zookeeper.getId(), zookeeper.getJob(), zookeeper.getSalary(), zookeeper.getWorkedMonths());
-            count++;
-        }
+    public boolean removeZookeeper(Zookeeper foundZookeeper) {
+        return zookeepers.remove(foundZookeeper);
     }
 
     public ArrayList<Animal> searchBySpecies(String rawReceivedSpecies) {
@@ -215,4 +165,5 @@ public class Zoo {
 
         return enclosureWithWantedSpecies != null ? enclosureWithWantedSpecies.animals : null;
     }
+
 }

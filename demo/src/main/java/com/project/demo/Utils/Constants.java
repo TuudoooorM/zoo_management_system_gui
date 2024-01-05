@@ -12,4 +12,5 @@ public abstract class Constants {
             DATABASE_NAME
     );
 
+    public static final int ID_SIZE = 4;
 }

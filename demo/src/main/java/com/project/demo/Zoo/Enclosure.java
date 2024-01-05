@@ -39,7 +39,7 @@ public class Enclosure implements ISpace, Comparable<Enclosure> {
 
 
 
-    void addAnimal(Animal animal) throws EnclosureCapacityExceededException {
+    public void addAnimal(Animal animal) throws EnclosureCapacityExceededException {
         if (capacity == 0) throw new EnclosureCapacityExceededException("There is no more space for animal " + animal.name);
 
         animals.add(animal);
@@ -51,13 +51,6 @@ public class Enclosure implements ISpace, Comparable<Enclosure> {
         if (didAnimalExistInEnclosure) capacity++;
 
         return didAnimalExistInEnclosure;
-    }
-
-    void listAnimals() {
-       ArrayList<Animal> sortedAnimals = new ArrayList<>(animals);
-       sortedAnimals.sort(Animal::compareTo);
-        for (Animal animal : sortedAnimals)
-            System.out.printf("\t %s (%d, %s) Health status: %s%n", animal.name, animal.age, animal.sex, animal.healthy ? "OK" : "UNHEALTHY");
     }
 
     public String getId() {

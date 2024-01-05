@@ -101,6 +101,19 @@ public class ListController extends DefaultController {
             return;
         }
 
+        int animalsCount = ZooApplication.zoo.getAnimalsCount();
+        Label animalInfoLabel = new Label(
+                String.format(
+                        "%d animal%s • %d species",
+                        animalsCount,
+                        animalsCount != 1 ? "s" : "",
+                        ZooApplication.zoo.getSpeciesCount()
+                ));
+
+
+        animalInfoLabel.getStyleClass().add("generic-centered-label");
+        listResultsContainer.getChildren().add(animalInfoLabel);
+
         int enclosureIndex = 1;
         for (Enclosure enclosure : enclosures) {
             ResultComponent enclosureResultComponent = new ResultComponent();

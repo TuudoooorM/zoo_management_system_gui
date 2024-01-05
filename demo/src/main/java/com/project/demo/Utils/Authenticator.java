@@ -39,7 +39,7 @@ public abstract class Authenticator {
         String password = InputReader.readPasswordFromInput();
         if (password == null) return false;
 
-        if (zoo.admin.password.equals(password)) {
+        if (zoo.admin.getPassword().equals(password)) {
             Authenticator.privilege = Privileges.ADMIN;
             Authenticator.employee = zoo.admin;
             return true;

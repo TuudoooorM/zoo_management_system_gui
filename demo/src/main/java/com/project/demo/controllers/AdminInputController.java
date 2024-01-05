@@ -3,9 +3,7 @@ package com.project.demo.controllers;
 import com.project.demo.Database.ZooDatabaseManager;
 import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.Sex;
-import com.project.demo.Zoo.Zoo;
 import com.project.demo.ZooApplication;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -62,8 +60,7 @@ public class AdminInputController extends DefaultController {
         Sex sex = sexChoiceInput.getSelectionModel().getSelectedIndex() == 0 ? Sex.male : Sex.female;
         String hashedPassword = passwordEncoder.encode(passwordInput.getText());
 
-        boolean didAddAdmin = ZooDatabaseManager.tryAddAdmin(fullName, sex, yearlySalary, workedMonths, hashedPassword);
-
+        boolean didAddAdmin = ZooDatabaseManager.tryAddAdminAndZooName(zooNameInput.getText(), fullName, sex, yearlySalary, workedMonths, hashedPassword);
         if (!didAddAdmin) {
             errorAlert.setContentText("There's been an error adding the admin to the database. Please try again.");
             errorAlert.show();
@@ -78,12 +75,7 @@ public class AdminInputController extends DefaultController {
         successAlert.setTitle("Admin input success");
         successAlert.show();
 
-        try {
-            ZookeeperInputController.setViewMode(ViewModes.SETUP);
-            ZooApplication.changeScene("zookeeper-input-view.fxml");
-        } catch (Exception error) {
-            System.err.println("There's been an error changing scene to zookeeper-input-view.");
-            Platform.exit();
-        }
+        ZookeeperInputController.setViewMode(ViewModes.SETUP);
+        super.navigateToView(actionEvent);
     }
 }

@@ -16,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.sql.*;
 
-public class AnimalInputController {
+public class AnimalInputController extends DefaultController {
     public TextField nameInput;
     public TextField speciesInput;
     public ChoiceBox<String> sexChoiceInput;
@@ -43,15 +43,21 @@ public class AnimalInputController {
         finishSetupButton.setVisible(getViewMode() == ViewModes.SETUP);
     }
 
+    @Override
     public void navigateToView(ActionEvent actionEvent) {
         Object eventSource = actionEvent.getSource();
         if (!(eventSource instanceof Button clickedButton)) return;
 
         try {
+            // TODO: add functionality for this, EnclosureInputController and ZookeeperInputController on "INPUT" view
+            // TODO: fix routing when on "INPUT" view
             String viewPath = (String) clickedButton.getUserData();
 
+            // Reset the zoo state so far if the user ever chooses to abort.
+            if (getViewMode() == ViewModes.SETUP && viewPath.contains("main-view"))
+                ZooApplication.zoo = new Zoo();
+
             AnimalInputController.setViewMode(ViewModes.INPUT);
-            if (viewPath.contains("main-view")) ZooApplication.zoo = new Zoo();
 
             ZooApplication.changeScene(viewPath);
         } catch (Exception error) {
@@ -102,9 +108,30 @@ public class AnimalInputController {
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
         successAlert.setHeaderText("This animal's details have been successfully configured.");
         successAlert.setTitle("Animal input success");
-        successAlert.show();
 
         if (getViewMode() == ViewModes.INPUT) {
+            // No need to check for null because zoo.addAnimal succeeded, if we get here.
+            Enclosure enclosureHousingThisSpecies = ZooApplication.zoo.findEnclosureBySpecies(species);
+            boolean didAddAnimalInDB = ZooDatabaseManager.tryQueryPreparedStatement(
+                    "INSERT INTO animals VALUES (?, ?, ?, ?, ?, ?)",
+                    Integer.parseInt(enclosureHousingThisSpecies.getId()),
+                    name,
+                    species,
+                    age,
+                    sex,
+                    healthy
+            );
+
+            if (!didAddAnimalInDB) {
+                ZooApplication.zoo.removeAnimal(enclosureHousingThisSpecies, new Animal(name, species, sex, age, healthy));
+
+                Alert errorAddingAnimalInDBAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
+                errorAddingAnimalInDBAlert.setTitle("Error adding animal to DB");
+                errorAddingAnimalInDBAlert.setHeaderText("There's been an error adding this animal to the database. Please try again.");
+                errorAddingAnimalInDBAlert.show();
+                return;
+            }
+
             try {
                 ZooApplication.changeScene("zoo-input-view.fxml");
             } catch (Exception error) {
@@ -112,6 +139,8 @@ public class AnimalInputController {
                 Platform.exit();
             }
         } else if (getViewMode() == ViewModes.SETUP) {
+            successAlert.show();
+
             nameInput.clear();
             speciesInput.clear();
             ageInput.clear();
@@ -140,26 +169,9 @@ public class AnimalInputController {
             return;
         }
 
-
-        System.out.println("Admin: ");
-        Admin admin = ZooApplication.zoo.admin;
-        System.out.printf("%s %s %s %d %d\n", admin.name, admin.sex, admin.password, admin.getSalary(), admin.getWorkedMonths());
-
-        System.out.println("Zookeepers: ");
-        ZooApplication.zoo.listZookeepers();
-        System.out.println("Enclosures: ");
-        ZooApplication.zoo.listEnclosures();
-        System.out.println("Animals: ");
-        ZooApplication.zoo.listAnimals();
-
-        try {
-            Authenticator.privilege = Privileges.ADMIN;
-            Authenticator.employee = ZooApplication.zoo.admin;
-            AnimalInputController.setViewMode(ViewModes.INPUT);
-            ZooApplication.changeScene("browsing-view.fxml");
-        } catch (Exception error) {
-            System.err.println("There's been an error changing scene to browsing-view.fxml");
-            Platform.exit();
-        }
+        Authenticator.privilege = Privileges.ADMIN;
+        Authenticator.employee = ZooApplication.zoo.admin;
+        AnimalInputController.setViewMode(ViewModes.INPUT);
+        super.navigateToView(actionEvent);
     }
 }
