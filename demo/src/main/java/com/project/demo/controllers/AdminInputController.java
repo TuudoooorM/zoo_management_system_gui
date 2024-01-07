@@ -75,7 +75,7 @@ public class AdminInputController extends DefaultController {
         successAlert.setTitle("Admin input success");
         successAlert.show();
 
-        ZookeeperInputController.setViewMode(ViewModes.SETUP);
-        super.navigateToView(actionEvent);
+        // admin-input-view is only accessible on zoo setup.
+        super.navigateToView(actionEvent, ViewModes.SETUP);
     }
 }

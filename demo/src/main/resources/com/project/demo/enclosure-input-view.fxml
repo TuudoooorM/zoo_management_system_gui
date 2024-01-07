@@ -11,7 +11,7 @@
 <VBox alignment="TOP_CENTER" prefHeight="469.0" prefWidth="590.0" spacing="60.0" style="-fx-background-color: #11190F" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.demo.controllers.EnclosureInputController">
    <HBox alignment="CENTER_LEFT" fillHeight="false" minHeight="70.0" spacing="20.0" style="-fx-border-color: transparent transparent #75A76D transparent; -fx-border-insets: 0;">
       <children>
-          <Button mnemonicParsing="false" onAction="#navigateToView" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05" userData="main-view.fxml">
+          <Button mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: linear-gradient(to right, #8ADE7C, #2B7A1F); -fx-background-radius: 20;" styleClass="primary-button" textAlignment="CENTER" textFill="#091e05">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>
@@ -32,7 +32,7 @@
                <Insets bottom="34.0" />
             </padding>
          </Region>
-          <Button fx:id="skipButton" mnemonicParsing="false" onAction="#navigateToView" styleClass="secondary-button" text="Skip" textAlignment="CENTER" textFill="#091e05" userData="animal-input-view.fxml">
+          <Button fx:id="skipButton" visible="false" mnemonicParsing="false" onAction="#navigateToView" styleClass="secondary-button" text="Skip" textAlignment="CENTER" textFill="#091e05" userData="animal-input-view.fxml">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>

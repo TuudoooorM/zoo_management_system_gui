@@ -1,7 +1,6 @@
 package com.project.demo.controllers;
 
 import com.project.demo.Database.ZooDatabaseManager;
-import com.project.demo.Utils.Randoms;
 import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.Sex;
 import com.project.demo.Zoo.Zoo;
@@ -12,7 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class ZookeeperInputController {
+
+public class ZookeeperInputController extends DefaultZooInputController {
     public TextField firstNameInput;
     public TextField lastNameInput;
     public ChoiceBox<String> sexChoiceInput;
@@ -21,42 +21,9 @@ public class ZookeeperInputController {
     public TextField jobInput;
     public PasswordField passwordInput;
 
-    public Button skipButton;
-
-    private static ViewModes viewMode = ViewModes.INPUT;
-
-    public static ViewModes getViewMode() {
-        return viewMode;
-    }
-
-    public static void setViewMode(ViewModes viewMode) {
-        ZookeeperInputController.viewMode = viewMode;
-    }
-
-
-    public void initialize() {
-        skipButton.setVisible(getViewMode() == ViewModes.SETUP);
-    }
-
-    public void navigateToView(ActionEvent actionEvent) {
-        Object eventSource = actionEvent.getSource();
-        if (!(eventSource instanceof Button clickedButton)) return;
-
-        try {
-            String viewPath = (String) clickedButton.getUserData();
-            if (viewPath.contains("enclosure-input-view")) EnclosureInputController.setViewMode(getViewMode());
-            // Reset the zoo state so far if the user ever chooses to abort.
-            if (viewPath.contains("main-view")) ZooApplication.zoo = new Zoo();
-
-            ZookeeperInputController.setViewMode(ViewModes.INPUT);
-            ZooApplication.changeScene(viewPath);
-        } catch (Exception error) {
-            System.err.println("There's been an error changing scene. Received scene path: " + clickedButton.getUserData());
-            Platform.exit();
-        }
-    }
-
     public void submitZookeeperInput(ActionEvent actionEvent) {
+        ViewModes viewMode = (ViewModes) super.getProps()[0];
+
         Alert errorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
         errorAlert.setHeaderText("Zookeeper input error");
         StringBuilder errorsMessageBuilder = new StringBuilder();
@@ -103,16 +70,34 @@ public class ZookeeperInputController {
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION, "", ButtonType.OK);
         successAlert.setHeaderText("This zookeeper's details have been successfully configured. Their ID is: " + addedZookeeper.getId());
         successAlert.setTitle("Zookeeper input success");
-        successAlert.show();
 
-        if (getViewMode() == ViewModes.INPUT) {
-            try {
-                ZooApplication.changeScene("zoo-input-view.fxml");
-            } catch (Exception error) {
-                System.err.println("There's been an error changing scene. Received scene path: zoo-input-view.fxml");
-                Platform.exit();
+        if (viewMode == ViewModes.INPUT) {
+            boolean didAddZookeeperInDB = ZooDatabaseManager.tryQueryPreparedStatement(
+                    "INSERT INTO zookeepers (id, name, sex, salary, worked_months, job, password)" +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    addedZookeeper.getId(),
+                    addedZookeeper.getName(),
+                    addedZookeeper.sex.ordinal(),
+                    addedZookeeper.getSalary(),
+                    addedZookeeper.getWorkedMonths(),
+                    !addedZookeeper.getJob().isEmpty() ? addedZookeeper.getJob() : null,
+                    addedZookeeper.getPassword()
+            );
+
+            if (!didAddZookeeperInDB) {
+                Alert errorAddingZookeeperToDBAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
+                errorAddingZookeeperToDBAlert.setTitle("Error adding zookeeper to DB");
+                errorAddingZookeeperToDBAlert.setHeaderText("There's been an error adding this zookeeper to the database. Please try again.");
+                errorAddingZookeeperToDBAlert.show();
+                ZooApplication.zoo.removeZookeeper(addedZookeeper);
+                return;
             }
-        } else if (getViewMode() == ViewModes.SETUP) {
+
+            successAlert.show();
+            super.navigateToView("zoo-input-view.fxml");
+
+        } else if (viewMode == ViewModes.SETUP) {
+            successAlert.show();
             firstNameInput.clear();
             lastNameInput.clear();
             yearlySalaryInput.clear();

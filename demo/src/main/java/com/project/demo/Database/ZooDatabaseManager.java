@@ -159,7 +159,6 @@ public class ZooDatabaseManager {
             return false;
         }
         String configFilePath = configFileURL.getPath() + "config.ini";
-        System.out.println(configFilePath);
 
         try (Writer configFileWriter = new FileWriter(configFilePath, false)) {
             configFileWriter.write(
@@ -186,7 +185,7 @@ public class ZooDatabaseManager {
 
             for (Zookeeper zookeeper : zoo.zookeepers) {
                 setPreparedParameters(zookeepersStatement,
-                        zookeeper.getId(), zookeeper.name, zookeeper.getJob(),
+                        zookeeper.getId(), zookeeper.name, !zookeeper.getJob().isEmpty() ? zookeeper.getJob() : null,
                         zookeeper.sex.ordinal(), zookeeper.getSalary(), zookeeper.getWorkedMonths(),
                         zookeeper.getPassword()
                 );

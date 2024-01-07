@@ -150,7 +150,7 @@ public class ListController extends DefaultController {
     private static ResultComponent prepareZookeeperResultComponent(Zookeeper zookeeper) {
         ResultComponent resultComponent = new ResultComponent();
         resultComponent.setText(
-                String.format("%s • %s • %s • %s • Salary: %d • %d month%s worked", zookeeper.getId(), zookeeper.name, zookeeper.getJob(), zookeeper.sex, zookeeper.getSalary(), zookeeper.getWorkedMonths(), zookeeper.getWorkedMonths() != 1 ? "s" : "")
+                String.format("%s • %s • %s • %s • Salary: %d • %d month%s worked", zookeeper.getId(), zookeeper.name, !zookeeper.getJob().isEmpty() ? zookeeper.getJob() : "No job set", zookeeper.sex, zookeeper.getSalary(), zookeeper.getWorkedMonths(), zookeeper.getWorkedMonths() != 1 ? "s" : "")
         );
 
         return resultComponent;

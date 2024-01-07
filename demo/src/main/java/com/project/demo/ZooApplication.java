@@ -1,20 +1,16 @@
 package com.project.demo;
 
-import com.project.demo.Exceptions.EnclosureCapacityExceededException;
-import com.project.demo.Exceptions.MissingEnclosureException;
-import com.project.demo.Zoo.Sex;
 import com.project.demo.Zoo.Zoo;
+import com.project.demo.controllers.DefaultController;
 import javafx.application.Application;
-import javafx.fxml.FXML;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class ZooApplication extends Application {
     private static Stage primaryStage;
@@ -37,9 +33,12 @@ public class ZooApplication extends Application {
         launch();
     }
 
-    public static void changeScene(String fxmlFilePath) throws IOException {
+    public static void changeScene(String fxmlFilePath, Object... controllerProps) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ZooApplication.class.getResource(fxmlFilePath));
         Parent newScene = fxmlLoader.load();
+
+        DefaultController controller = fxmlLoader.getController();
+        controller.setProps(controllerProps);
 
         primaryStage.getScene().setRoot(newScene);
     }

@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
 import java.sql.*;
 
 public class AnimalInputController extends DefaultController {
@@ -25,39 +26,30 @@ public class AnimalInputController extends DefaultController {
 
     public Button finishSetupButton;
 
-
-    private static ViewModes viewMode = ViewModes.INPUT;
     public AnchorPane inputsContainer;
     public Button submitButton;
 
-    public static void setViewMode(ViewModes viewMode) {
-        AnimalInputController.viewMode = viewMode;
-    }
-
-    public static ViewModes getViewMode() {
-        return viewMode;
-    }
-
     @FXML
     public void initialize() {
-        finishSetupButton.setVisible(getViewMode() == ViewModes.SETUP);
+        Platform.runLater(() -> {
+            ViewModes viewMode = (ViewModes) super.getProps()[0];
+            finishSetupButton.setVisible(viewMode == ViewModes.SETUP);
+        });
     }
 
     @Override
     public void navigateToView(ActionEvent actionEvent) {
+        ViewModes viewMode = (ViewModes) super.getProps()[0];
+
         Object eventSource = actionEvent.getSource();
         if (!(eventSource instanceof Button clickedButton)) return;
 
         try {
-            // TODO: add functionality for this, EnclosureInputController and ZookeeperInputController on "INPUT" view
-            // TODO: fix routing when on "INPUT" view
             String viewPath = (String) clickedButton.getUserData();
 
             // Reset the zoo state so far if the user ever chooses to abort.
-            if (getViewMode() == ViewModes.SETUP && viewPath.contains("main-view"))
+            if (viewMode == ViewModes.SETUP)
                 ZooApplication.zoo = new Zoo();
-
-            AnimalInputController.setViewMode(ViewModes.INPUT);
 
             ZooApplication.changeScene(viewPath);
         } catch (Exception error) {
@@ -68,6 +60,8 @@ public class AnimalInputController extends DefaultController {
 
 
     public void submitAnimalInput(ActionEvent actionEvent) {
+        ViewModes viewMode = (ViewModes) super.getProps()[0];
+
         Alert errorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
         errorAlert.setHeaderText("Animal input error");
         StringBuilder errorsMessageBuilder = new StringBuilder();
@@ -109,36 +103,32 @@ public class AnimalInputController extends DefaultController {
         successAlert.setHeaderText("This animal's details have been successfully configured.");
         successAlert.setTitle("Animal input success");
 
-        if (getViewMode() == ViewModes.INPUT) {
+        if (viewMode == ViewModes.INPUT) {
             // No need to check for null because zoo.addAnimal succeeded, if we get here.
             Enclosure enclosureHousingThisSpecies = ZooApplication.zoo.findEnclosureBySpecies(species);
             boolean didAddAnimalInDB = ZooDatabaseManager.tryQueryPreparedStatement(
-                    "INSERT INTO animals VALUES (?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO animals (enclosure_id, name, species, age, sex, healthy)" +
+                            "VALUES (?, ?, ?, ?, ?, ?)",
                     Integer.parseInt(enclosureHousingThisSpecies.getId()),
                     name,
                     species,
                     age,
-                    sex,
+                    sex.ordinal(),
                     healthy
             );
 
             if (!didAddAnimalInDB) {
-                ZooApplication.zoo.removeAnimal(enclosureHousingThisSpecies, new Animal(name, species, sex, age, healthy));
-
                 Alert errorAddingAnimalInDBAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
                 errorAddingAnimalInDBAlert.setTitle("Error adding animal to DB");
                 errorAddingAnimalInDBAlert.setHeaderText("There's been an error adding this animal to the database. Please try again.");
                 errorAddingAnimalInDBAlert.show();
+                ZooApplication.zoo.removeAnimal(enclosureHousingThisSpecies, new Animal(name, species, sex, age, healthy));
                 return;
             }
 
-            try {
-                ZooApplication.changeScene("zoo-input-view.fxml");
-            } catch (Exception error) {
-                System.err.println("There's been an error changing scene. Received scene path: zoo-input-view.fxml");
-                Platform.exit();
-            }
-        } else if (getViewMode() == ViewModes.SETUP) {
+            successAlert.show();
+            super.navigateToView("zoo-input-view.fxml");
+        } else if (viewMode == ViewModes.SETUP) {
             successAlert.show();
 
             nameInput.clear();
@@ -171,7 +161,19 @@ public class AnimalInputController extends DefaultController {
 
         Authenticator.privilege = Privileges.ADMIN;
         Authenticator.employee = ZooApplication.zoo.admin;
-        AnimalInputController.setViewMode(ViewModes.INPUT);
         super.navigateToView(actionEvent);
+    }
+
+    public void goBack(ActionEvent actionEvent) {
+        ViewModes viewMode = (ViewModes) super.getProps()[0];
+        try {
+            // Reset zoo state if the user ever chooses to abort.
+            if (viewMode == ViewModes.SETUP) ZooApplication.zoo = new Zoo();
+
+            ZooApplication.changeScene(viewMode == ViewModes.INPUT ? "zoo-input-view.fxml" : viewMode == ViewModes.SETUP ? "main-view.fxml" : "");
+        } catch (IOException e) {
+            System.err.println("There's been an error going back to the zoo input page: " + e.getMessage());
+            Platform.exit();
+        }
     }
 }
