@@ -11,6 +11,10 @@ public class ParallelSearcher<T> {
         this.items = items;
     }
 
+    public List<T> getItems() {
+        return items;
+    }
+
     public List<T> findItems(Predicate<T> predicate) {
         if (items.size() < Constants.THREAD_COUNT)
             return sequentialSearch(predicate);

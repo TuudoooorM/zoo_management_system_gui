@@ -19,6 +19,18 @@ public class FinderThread<T> extends Thread {
         return resultIndices;
     }
 
+    public List<T> getValues() {
+        return values;
+    }
+
+    public int getChunkStart() {
+        return chunkStart;
+    }
+
+    public int getChunkEnd() {
+        return chunkEnd;
+    }
+
     public FinderThread(List<T> values, int chunkStart, int chunkEnd) {
         this.values = values;
         this.chunkStart = chunkStart;
