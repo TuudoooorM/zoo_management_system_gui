@@ -2,11 +2,12 @@ package com.project.demo.Zoo;
 
 import com.project.demo.Exceptions.EnclosureCapacityExceededException;
 import com.project.demo.Exceptions.MissingEnclosureException;
-import com.project.demo.ZooApplication;
+import com.project.demo.Utils.ParallelSearcher;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class Zoo {
     public Admin admin = null;
@@ -48,39 +49,53 @@ public class Zoo {
         addAnimal(new Animal(name, species, sex, age, healthy));
     }
 
-    public Enclosure findEnclosureBySpecies(String species) {
-        return enclosures.
-                stream()
-                .filter(enclosure -> enclosure.speciesHoused.equalsIgnoreCase(species))
-                .findFirst()
-                .orElse(null);
+    public List<Enclosure> findEnclosuresBySpecies(String species) {
+        ParallelSearcher<Enclosure> parallelSearcher = new ParallelSearcher<>(enclosures);
+        List<Enclosure> foundEnclosures = parallelSearcher.findItems(
+                enclosure -> enclosure.speciesHoused.equals(species)
+        );
+
+        return !foundEnclosures.isEmpty() ? foundEnclosures : null;
     }
 
     public void addAnimal(Animal animal) throws MissingEnclosureException, EnclosureCapacityExceededException {
-        Enclosure enclosureHousingThisSpecies = findEnclosureBySpecies(animal.species);
+        List<Enclosure> enclosuresHousingThisSpecies = findEnclosuresBySpecies(animal.species);
 
-        if (enclosureHousingThisSpecies == null)
-            throw new MissingEnclosureException("There is no such enclosure for animal species " + animal.species);
+        if (enclosuresHousingThisSpecies == null)
+            throw new MissingEnclosureException("There are no enclosures for animal species " + animal.species);
 
         if (!species.contains(animal.species))
             species.add(animal.species.toLowerCase());
 
-        enclosureHousingThisSpecies.addAnimal(animal);
+        boolean didAddAnimal = false;
+        for (Enclosure enclosure : enclosuresHousingThisSpecies) {
+            try {
+                enclosure.addAnimal(animal);
+
+                didAddAnimal = true;
+                break;
+            } catch (EnclosureCapacityExceededException ignored) {
+                // Just pass over it and try the next one.
+            }
+        }
+
+        if (!didAddAnimal)
+            throw new EnclosureCapacityExceededException("There is no more space for animal " + animal.name);
     }
 
     public Pair<Animal, Enclosure> findAnimalInEnclosure(String species, String name) {
-        Enclosure foundEnclosure = findEnclosureBySpecies(species);
-        if (foundEnclosure == null) return null;
+        List<Enclosure> foundEnclosures = findEnclosuresBySpecies(species);
+        if (foundEnclosures == null) return null;
 
-        Animal foundAnimal = foundEnclosure.animals
-                .stream()
-                .filter(animal -> animal.name.equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
+        for (Enclosure enclosure : foundEnclosures) {
+            ParallelSearcher<Animal> parallelSearcher = new ParallelSearcher<>(enclosure.animals);
+            List<Animal> foundAnimals = parallelSearcher.findItems(animal -> animal.name.equals(name));
+            if (foundAnimals.isEmpty()) continue;
 
-        if (foundAnimal == null) return null;
+            return new Pair<>(foundAnimals.get(0), enclosure);
+        }
 
-        return new Pair<>(foundAnimal, foundEnclosure);
+        return null;
     }
 
      public boolean removeAnimal(Enclosure enclosure, Animal animal) {
@@ -89,8 +104,8 @@ public class Zoo {
 
     public Enclosure addEnclosure(String id, String speciesHoused, int capacity, float width, float height, float length) {
         Enclosure newEnclosure = new Enclosure(id, speciesHoused, capacity, width, height, length);
-
         enclosures.add(newEnclosure);
+        species.add(speciesHoused);
         return newEnclosure;
     }
 
@@ -98,22 +113,29 @@ public class Zoo {
         Enclosure newEnclosure = new Enclosure(speciesHoused, capacity, width, height, length);
 
         enclosures.add(newEnclosure);
+        species.add(speciesHoused);
         return newEnclosure;
     }
 
     public void addEnclosure(Enclosure enclosure) {
+        species.add(enclosure.speciesHoused);
         enclosures.add(enclosure);
     }
 
     public Enclosure findEnclosure(String enclosureID) {
-        return enclosures
-                .stream()
-                .filter(enclosure -> enclosure.getId().equals(enclosureID))
-                .findFirst()
-                .orElse(null);
+        ParallelSearcher<Enclosure> parallelSearcher = new ParallelSearcher<>(enclosures);
+        List<Enclosure> foundEnclosures = parallelSearcher.findItems(
+                enclosure -> enclosure.getId().equals(enclosureID)
+        );
+
+        // There should only be one enclosure with this ID.
+        return !enclosures.isEmpty() ? foundEnclosures.get(0) : null;
     }
 
     public boolean removeEnclosure(Enclosure enclosure) {
+        if (enclosure == null) return false;
+
+        species.remove(enclosure.speciesHoused);
         return enclosures.remove(enclosure);
     }
 
@@ -141,12 +163,13 @@ public class Zoo {
         zookeepers.add(zookeeper);
     }
 
+
     public Zookeeper findZookeeper(String zookeeperID) {
-        return zookeepers
-                .stream()
-                .filter(zookeeper -> zookeeper.getId().equals(zookeeperID))
-                .findFirst()
-                .orElse(null);
+        ParallelSearcher<Zookeeper> parallelSearcher = new ParallelSearcher<>(zookeepers);
+        List<Zookeeper> foundZookeeper = parallelSearcher.findItems(zookeeper -> zookeeper.getId().equals(zookeeperID));
+
+        // There should only be one zookeeper with this ID.
+        return !foundZookeeper.isEmpty() ? foundZookeeper.get(0) : null;
     }
 
     public boolean removeZookeeper(Zookeeper foundZookeeper) {
@@ -155,15 +178,23 @@ public class Zoo {
 
     public ArrayList<Animal> searchBySpecies(String rawReceivedSpecies) {
         String receivedSpecies = rawReceivedSpecies.toLowerCase();
-        if (!species.contains(receivedSpecies)) return null;
 
-        Enclosure enclosureWithWantedSpecies = enclosures
-                .stream()
-                .filter(enclosure -> enclosure.speciesHoused.toLowerCase().equals(receivedSpecies))
-                .findFirst()
-                .orElse(null);
+        ParallelSearcher<Enclosure> parallelSearcher = new ParallelSearcher<>(enclosures);
+        List<Enclosure> foundEnclosures = parallelSearcher.findItems(
+                enclosure -> enclosure.speciesHoused.equals(receivedSpecies)
+        );
 
-        return enclosureWithWantedSpecies != null ? enclosureWithWantedSpecies.animals : null;
+        if (foundEnclosures.isEmpty()) return null;
+
+        // Consider the initial capacity to be the number of found enclosures. It's probably unlikely
+        // for this to be enough to store all the animals, unless each enclosure found has exactly one animal
+        // in it.
+        ArrayList<Animal> foundAnimals = new ArrayList<>(foundEnclosures.size());
+
+        for (Enclosure enclosure : foundEnclosures)
+            foundAnimals.addAll(enclosure.animals);
+
+        return !foundAnimals.isEmpty() ? foundAnimals : null;
     }
-
 }
+

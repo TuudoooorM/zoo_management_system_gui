@@ -4,7 +4,6 @@ import com.project.demo.Database.ZooDatabaseManager;
 import com.project.demo.Exceptions.EnclosureCapacityExceededException;
 import com.project.demo.Exceptions.MissingEnclosureException;
 import com.project.demo.Utils.Authenticator;
-import com.project.demo.Utils.Constants;
 import com.project.demo.Utils.ViewModes;
 import com.project.demo.Zoo.*;
 import com.project.demo.ZooApplication;
@@ -13,9 +12,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Pair;
 
 import java.io.IOException;
-import java.sql.*;
 
 public class AnimalInputController extends DefaultController {
     public TextField nameInput;
@@ -105,7 +104,21 @@ public class AnimalInputController extends DefaultController {
 
         if (viewMode == ViewModes.INPUT) {
             // No need to check for null because zoo.addAnimal succeeded, if we get here.
-            Enclosure enclosureHousingThisSpecies = ZooApplication.zoo.findEnclosureBySpecies(species);
+            Pair<Animal, Enclosure> addedAnimalInEnclosureData =
+                    ZooApplication.zoo.findAnimalInEnclosure(species, name);
+
+            if (addedAnimalInEnclosureData == null) {
+                // We should never get inside here, because zoo.addAnimal found an enclosure to add
+                // the animal in.
+                // If we ever get inside this if, then the rules of the Universe broke... or
+                // somehow the animal got deleted in the meantime.
+                Alert errorFindingAddedAnimal = getErrorAlert("Internal error", "The added animal went... missing?");
+                errorFindingAddedAnimal.show();
+                return;
+            }
+
+            Enclosure enclosureHousingThisSpecies = addedAnimalInEnclosureData.getValue();
+
             boolean didAddAnimalInDB = ZooDatabaseManager.tryQueryPreparedStatement(
                     "INSERT INTO animals (enclosure_id, name, species, age, sex, healthy)" +
                             "VALUES (?, ?, ?, ?, ?, ?)",
@@ -118,9 +131,7 @@ public class AnimalInputController extends DefaultController {
             );
 
             if (!didAddAnimalInDB) {
-                Alert errorAddingAnimalInDBAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
-                errorAddingAnimalInDBAlert.setTitle("Error adding animal to DB");
-                errorAddingAnimalInDBAlert.setHeaderText("There's been an error adding this animal to the database. Please try again.");
+                Alert errorAddingAnimalInDBAlert = getErrorAlert("Error adding animal to DB", "There's been an error adding this animal to the database. Please try again.");
                 errorAddingAnimalInDBAlert.show();
                 ZooApplication.zoo.removeAnimal(enclosureHousingThisSpecies, new Animal(name, species, sex, age, healthy));
                 return;
@@ -138,6 +149,13 @@ public class AnimalInputController extends DefaultController {
         }
     }
 
+    private static Alert getErrorAlert(String titleText, String headerText) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
+        errorAlert.setTitle(titleText);
+        errorAlert.setHeaderText(headerText);
+        return errorAlert;
+    }
+
     public void finishSetup(ActionEvent actionEvent) {
         inputsContainer.getChildren().clear();
         submitButton.setDisable(true);
@@ -152,15 +170,12 @@ public class AnimalInputController extends DefaultController {
                         ZooDatabaseManager.tryInsertBatchZookeepers(ZooApplication.zoo);
 
         if (!didAddEverythingToDB) {
-            Alert dbInsertionErrorAlert = new Alert(Alert.AlertType.ERROR, "", ButtonType.OK);
-            dbInsertionErrorAlert.setTitle("DB Update error");
-            dbInsertionErrorAlert.setHeaderText("There's been an error adding something to the database. Aborting...");
+            Alert dbInsertionErrorAlert = getErrorAlert("DB Update error", "There's been an error adding something to the database. Aborting...");
             dbInsertionErrorAlert.show();
             return;
         }
 
-        Authenticator.privilege = Privileges.ADMIN;
-        Authenticator.employee = ZooApplication.zoo.admin;
+        Authenticator.authenticate(Privileges.ADMIN, ZooApplication.zoo.admin);
         super.navigateToView(actionEvent);
     }
 

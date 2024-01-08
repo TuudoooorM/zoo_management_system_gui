@@ -13,4 +13,6 @@ public abstract class Constants {
     );
 
     public static final int ID_SIZE = 4;
+
+    public static final int THREAD_COUNT = 4;
 }

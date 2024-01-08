@@ -31,9 +31,7 @@ public class AdminLoginController extends DefaultController {
             return;
         }
 
-        Authenticator.privilege = Privileges.ADMIN;
-        Authenticator.employee = ZooApplication.zoo.admin;
-
+        Authenticator.authenticate(Privileges.ADMIN, ZooApplication.zoo.admin);
         super.navigateToView(actionEvent);
     }
 }

@@ -37,8 +37,6 @@ public class Enclosure implements ISpace, Comparable<Enclosure> {
         this.length = length;
     }
 
-
-
     public void addAnimal(Animal animal) throws EnclosureCapacityExceededException {
         if (capacity == 0) throw new EnclosureCapacityExceededException("There is no more space for animal " + animal.name);
 

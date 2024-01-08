@@ -15,11 +15,11 @@ public class BrowsingController extends DefaultController {
     public PrivilegeStatusComponent privilegeStatus;
 
     public void initialize() {
-        zooInputButton.setDisable(Authenticator.privilege != Privileges.ADMIN);
+        zooInputButton.setDisable(Authenticator.getPrivilege() != Privileges.ADMIN);
         browsingHeader.setText(ZooApplication.zoo.name + " > Browsing");
-        String employeeDetails = Authenticator.privilege != Privileges.GUEST ? " (Hello, " + Authenticator.employee.getName() + ")" : "";
+        String employeeDetails = Authenticator.getPrivilege() != Privileges.GUEST ? " (Hello, " + Authenticator.getEmployee().getName() + ")" : "";
 
-        privilegeStatus.setPrivilegeLabelText("Privilege: " + Authenticator.privilege + employeeDetails);
+        privilegeStatus.setPrivilegeLabelText("Privilege: " + Authenticator.getPrivilege() + employeeDetails);
     }
 
     public void exit(ActionEvent ignored) {

@@ -58,9 +58,7 @@ public class ZookeeperLoginController extends DefaultController {
             return;
         }
 
-        Authenticator.privilege = Privileges.ZOOKEEPER;
-        Authenticator.employee = foundZookeeper;
-
+        Authenticator.authenticate(Privileges.ZOOKEEPER, foundZookeeper);
         super.navigateToView(actionEvent);
     }
 }

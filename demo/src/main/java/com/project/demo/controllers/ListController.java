@@ -1,5 +1,6 @@
 package com.project.demo.controllers;
 
+import com.project.demo.Exceptions.AuthorisationException;
 import com.project.demo.Utils.Authenticator;
 import com.project.demo.Zoo.Animal;
 import com.project.demo.Zoo.Enclosure;
@@ -32,13 +33,14 @@ public class ListController extends DefaultController {
     }
 
     private void listZookeepers() {
-        if (Authenticator.privilege == Privileges.GUEST) {
+        try {
+            Authenticator.authorise(Privileges.ZOOKEEPERS_AND_ABOVE);
+        } catch (AuthorisationException error) {
             Label noPermissionLabel = new Label("You do not have permission to list zookeepers.");
             noPermissionLabel.getStyleClass().add("generic-centered-label");
             listResultsContainer.getChildren().add(noPermissionLabel);
             return;
         }
-
 
         ArrayList<Zookeeper> zookeepers = ZooApplication.zoo.zookeepers;
         if (zookeepers.isEmpty()) {
@@ -48,14 +50,16 @@ public class ListController extends DefaultController {
             return;
         }
 
-        if (Authenticator.privilege == Privileges.ZOOKEEPER) {
-            if (Authenticator.employee == null) {
+        if (Authenticator.getPrivilege() == Privileges.ZOOKEEPER) {
+            if (Authenticator.getEmployee() == null) {
                 System.err.println("Broken state. The privilege for the zookeeper is defined but not the employee.");
                 Platform.exit();
                 return;
             }
 
-            listResultsContainer.getChildren().add(prepareZookeeperResultComponent((Zookeeper) Authenticator.employee));
+            listResultsContainer.getChildren().add(
+                    prepareZookeeperResultComponent((Zookeeper) Authenticator.getEmployee())
+            );
 
             Label onlyShowingThisZookeeperLabel = new Label("Only showing information about you.");
             onlyShowingThisZookeeperLabel.getStyleClass().add("generic-centered-label");
