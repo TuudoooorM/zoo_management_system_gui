@@ -32,13 +32,14 @@ public class ZookeeperLoginController extends DefaultController {
         StringBuilder errorsTextBuilder = new StringBuilder();
 
         if (zookeeperID.length() < Constants.ID_SIZE)
-            errorsTextBuilder.append("The ID is " + Constants.ID_SIZE + " characters long.");
+            errorsTextBuilder.append("The ID is " + Constants.ID_SIZE + " characters long.\n");
 
         if (zookeeperPassword.length() < 8)
-            errorsTextBuilder.append("The password is at least 8 characters long.");
+            errorsTextBuilder.append("The password is at least 8 characters long.\n");
 
         if (!errorsTextBuilder.isEmpty()) {
             errorsAlert.setHeaderText(errorsTextBuilder.toString());
+            errorsAlert.show();
             return;
         }
 

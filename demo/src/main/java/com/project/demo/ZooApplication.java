@@ -13,9 +13,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ZooApplication extends Application {
-    private static Stage primaryStage;
     public static Zoo zoo = new Zoo();
 
+    private static Stage primaryStage;
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;

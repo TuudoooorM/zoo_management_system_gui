@@ -79,7 +79,7 @@ public class AnimalInputController extends DefaultController {
         }
 
         if (age < 0)
-            errorsMessageBuilder.append("The age of the animal must be positive.");
+            errorsMessageBuilder.append("The age of the animal must be positive.\n");
 
         String name = nameInput.getText();
         String species = speciesInput.getText();
@@ -89,7 +89,7 @@ public class AnimalInputController extends DefaultController {
         try {
             ZooApplication.zoo.addAnimal(name, species, sex, age, healthy);
         } catch (EnclosureCapacityExceededException | MissingEnclosureException e) {
-            errorsMessageBuilder.append(e.getMessage());
+            errorsMessageBuilder.append(e.getMessage()).append("\n");
         }
 
         if (!errorsMessageBuilder.isEmpty()) {

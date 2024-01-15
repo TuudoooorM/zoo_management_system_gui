@@ -102,7 +102,9 @@ public class ZooDatabaseManager {
         }
 
         try (Connection connection = DriverManager.getConnection(Constants.CONNECTION_URL, "root", "admin")) {
-            PreparedStatement zookeeperSearchStatement = connection.prepareStatement("SELECT * FROM zookeepers WHERE id = ? LIMIT 1");
+            PreparedStatement zookeeperSearchStatement = connection.prepareStatement(
+                    "SELECT * FROM zookeepers WHERE id = ? LIMIT 1"
+            );
             setPreparedParameters(zookeeperSearchStatement, zookeeperID);
 
             ResultSet zookeepersResultSet = zookeeperSearchStatement.executeQuery();
@@ -138,7 +140,7 @@ public class ZooDatabaseManager {
                 int salary = zookeepersResultSet.getInt("salary");
                 int workedMonths = zookeepersResultSet.getInt("worked_months");
                 String job = zookeepersResultSet.getString("job");
-                if (job.equals("null")) job = "";
+                if (job == null) job = "";
 
                 String password = zookeepersResultSet.getString("password");
 
@@ -274,7 +276,7 @@ public class ZooDatabaseManager {
                 return new Pair<>(null, "Malformed admin name");
             String adminName = adminNameRaw[1];
 
-            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");;
+            if (!scanner.hasNextLine()) return new Pair<>(null, "The config file is incomplete");
             String[] adminSexRaw = scanner.nextLine().split("=");
             if (adminSexRaw.length != 2 || !adminSexRaw[0].equals("admin_sex"))
                 return new Pair<>(null, "Malformed admin sex");
